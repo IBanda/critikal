@@ -1,5 +1,5 @@
 {
-  "extends": ["airbnb-typescript", "prettier"],
+  "extends": ["airbnb-typescript", "airbnb/hooks", "prettier"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
@@ -8,6 +8,8 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "jsx-a11y/anchor-is-valid": "off",
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "consistent-return": "off",
+    "func-names": "off"
   }
 }
