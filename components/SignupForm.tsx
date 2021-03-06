@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import useSubscriber from 'lib/useSubscriber';
 import { useEffect, useState } from 'react';
+import Alert from './Alert';
 import Input from './Input';
 
 export default function SignupForm() {
@@ -9,7 +10,7 @@ export default function SignupForm() {
   const [password, setPassword] = useState('');
   const [{ message, success }, setNotification] = useState({
     message: '',
-    success: null,
+    success: false,
   });
   const { mutateSubscriber } = useSubscriber({
     redirect: true,
@@ -23,6 +24,7 @@ export default function SignupForm() {
     );
     return () => clearTimeout(timer);
   }, [success]);
+
   const onSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
@@ -50,14 +52,15 @@ export default function SignupForm() {
   const alertClass = success ? 'bg-green-500' : 'bg-red-500';
   return (
     <form className="max-w-md" onSubmit={onSignUp}>
-      {message && (
-        <div
-          role="alert"
-          className={`${alertClass} tracking-tighter text-white p-1 rounded text-sm mb-4`}
-        >
-          {message}
-        </div>
-      )}
+      <Alert
+        show={Boolean(message)}
+        duration={5000}
+        onHide={() => setNotification({ message: '', success: false })}
+        className={alertClass}
+      >
+        {message}
+      </Alert>
+
       <label htmlFor="name" className="font-medium">
         Name
         <Input

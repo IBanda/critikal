@@ -24,9 +24,15 @@ export default withSession(
       const newSubscriber = await subscriber.save();
 
       if (!newSubscriber)
-        throw new Error('An error occurred while creating a new Subscriber ');
+        return res.json({
+          message: 'An error occurred while creating a new Subscriber ',
+          success: false,
+        });
 
-      req.session.set('subscriber', newSubscriber.email);
+      req.session.set('subscriber', {
+        email: newSubscriber.email,
+        id: newSubscriber._id,
+      });
       await req.session.save();
       res
         .status(201)

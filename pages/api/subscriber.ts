@@ -7,7 +7,7 @@ export default withSession(
     const subscriber = req.session.get('subscriber');
     if (subscriber) {
       res.json({
-        subscriber,
+        ...subscriber,
         loggedIn: true,
       });
     } else {

@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import useSWR from 'swr';
 
 interface Redirection {
-  redirectPath: string | null;
-  redirect: boolean;
+  redirectPath?: string | null;
+  redirect?: boolean;
 }
 
 export default function useSubscriber({

@@ -10,7 +10,7 @@ export default function SignUp() {
         <SignupForm />
       </div>
       <div className="col-span-1 flex items-center justify-center bg-indigo-400 ">
-        <img className="max-w-lg" src="signup.svg" alt="signup" />
+        <img className="max-w-lg" src="/world.svg" alt="signup" />
       </div>
     </div>
   );

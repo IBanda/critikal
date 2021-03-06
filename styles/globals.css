@@ -17,6 +17,18 @@ a {
   box-sizing: border-box;
 }
 
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border-color: #a5b4fc !important;
+}
+
+.ql-container.ql-snow {
+  height: 200px;
+}
+
+.ql-editor p {
+  font-size: 16px;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
