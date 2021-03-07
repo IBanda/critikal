@@ -50,7 +50,7 @@ export default function Form({ receiverEmail }: Props) {
   };
 
   return (
-    <form className="max-w-md mx-auto" onSubmit={onEmailSend}>
+    <form className="max-w-xl mx-auto" onSubmit={onEmailSend}>
       <Alert
         show={Boolean(message)}
         duration={5000}

@@ -5,8 +5,7 @@ import Link from 'next/link';
 import Alert from './Alert';
 import Input from './Input';
 
-export default function SignupForm() {
-  const [name, setName] = useState('');
+export default function SigninForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [{ message, success }, setNotification] = useState({
@@ -29,13 +28,12 @@ export default function SignupForm() {
   const onSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await fetch('/api/signup', {
+      const response = await fetch('/api/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name,
           email,
           password,
         }),
@@ -61,15 +59,7 @@ export default function SignupForm() {
       >
         {message}
       </Alert>
-      <label htmlFor="name" className="font-medium">
-        Name
-        <Input
-          id="name"
-          type="text"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-        />
-      </label>
+
       <label htmlFor="email" className="font-medium">
         Email
         <Input
@@ -94,12 +84,12 @@ export default function SignupForm() {
         className="mt-4 bg-indigo-600 w-full p-3 text-white font-medium tracking-tighter rounded focus:outline-none focus:ring-2 focus:border-indigo-300"
         type="submit"
       >
-        Sign Up
+        Sign In
       </button>
       <div className="text-sm tracking-tight mt-4">
-        Already have an account?
-        <Link href="/signin">
-          <a className="text-indigo-400"> Sign In</a>
+        Don&apos;t have an account?
+        <Link href="/">
+          <a className="text-indigo-400"> Sign Up</a>
         </Link>
       </div>
     </form>

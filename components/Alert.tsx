@@ -25,7 +25,7 @@ export default function Alert({
     show && (
       <div
         role="alert"
-        className={`tracking-tighter text-white p-1 rounded text-sm mb-4 ${className}`}
+        className={`tracking-tighter text-white p-2 rounded text-sm mb-4 ${className}`}
       >
         {children}
       </div>

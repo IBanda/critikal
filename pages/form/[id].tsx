@@ -15,11 +15,20 @@ export default function DefaultForm({ email, error }: Props) {
     <Form receiverEmail={email} />
   );
   return (
-    <div className="py-16 container">
+    <div
+      style={{
+        backgroundImage: `url(/form-bg.svg)`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+      }}
+      className="py-16 container bg-opacity-25"
+    >
       <Head>
         <title>Form</title>
       </Head>
-      {element}
+      <div className="relative z-10">{element}</div>
+      <div className="bg-opacity-90 bg-white fixed top-0 left-0 w-full h-full" />
       <div className="flex items-center shadow p-1 fixed right-0 top-1/2 bg-white">
         <span className="text-xs tracking-tight font-medium">Powered by:</span>
         <img className="w-8 ml-1" src="/logo.png" alt="logo" />

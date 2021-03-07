@@ -1,12 +1,12 @@
 import type { GetServerSideProps } from 'next';
-import SignupForm from 'components/SignupForm';
 import withSession from 'lib/session';
 import AuthLayout from 'components/AuthLayout';
+import SigninForm from 'components/SigninForm';
 
 export default function SignUp() {
   return (
     <AuthLayout>
-      <SignupForm />
+      <SigninForm />
     </AuthLayout>
   );
 }

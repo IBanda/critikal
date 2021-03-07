@@ -20,10 +20,16 @@ a {
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow {
   border-color: #a5b4fc !important;
+  background-color: #fff;
 }
 
 .ql-container.ql-snow {
   height: 200px;
+  border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.ql-toolbar.ql-snow {
+  border-radius: 0.25rem 0.25rem 0 0;
 }
 
 .ql-editor p {

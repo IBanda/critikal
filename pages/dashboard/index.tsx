@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     if (!subscriber) {
       return {
         redirect: {
-          destination: '/',
+          destination: '/signin',
           permanent: false,
         },
       };
