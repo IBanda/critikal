@@ -27,7 +27,7 @@ export default function LinkCopy({ id }: Props) {
           type="text"
           ref={inputRef}
           value={`http://localhost:3000/form/${id}`}
-          className="bg-gray-100 p-2 w-80 focus:outline-none"
+          className="bg-gray-100 p-2 md:w-80 focus:outline-none"
           readOnly
         />
         <div className="relative">

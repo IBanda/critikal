@@ -5,7 +5,12 @@ import { useRouter } from 'next/router';
 import Input from './Input';
 import Alert from './Alert';
 
-const TextArea = dynamic(import('./TextArea'), { ssr: false });
+const TextArea = dynamic(import('./TextArea'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-60 bg-white border border-indigo-300 mt-2 rounded" />
+  ),
+});
 
 interface Props {
   receiverEmail: string;
@@ -17,14 +22,20 @@ export default function Form({ receiverEmail }: Props) {
   const [subject, setSubject] = useState('');
   const [htmlMessage, setHtml] = useState('');
   const [textMessage, setText] = useState('');
-  const [{ message }, setNotification] = useState({
+  const [{ message, sending }, setNotification] = useState({
     message: '',
     success: false,
+    sending: false,
   });
   const router = useRouter();
 
   const onEmailSend = async (e: FormEvent) => {
     e.preventDefault();
+    setNotification({
+      message: 'Sending...',
+      success: false,
+      sending: true,
+    });
     try {
       const response = await fetch('/api/send', {
         method: 'POST',
@@ -54,8 +65,10 @@ export default function Form({ receiverEmail }: Props) {
       <Alert
         show={Boolean(message)}
         duration={5000}
-        onHide={() => setNotification({ message: '', success: false })}
-        className="bg-red-500"
+        onHide={() =>
+          setNotification({ message: '', success: false, sending: false })
+        }
+        className={`${sending ? 'bg-yellow-400' : 'bg-red-500'}`}
       >
         {message}
       </Alert>

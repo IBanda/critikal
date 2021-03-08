@@ -7,7 +7,7 @@ export default function Header() {
   const onLogout = async () => {
     await fetch('/api/logout');
     mutateSubscriber();
-    router.push('/');
+    router.push('/signin');
   };
   return (
     <header className="flex items-center justify-between px-3 mb-8">
