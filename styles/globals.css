@@ -19,8 +19,8 @@ a {
 
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow {
-  border-color: #a5b4fc !important;
-  background-color: #fff;
+  border: none !important;
+  background-color: #f3f4f6;
 }
 
 .ql-container.ql-snow {

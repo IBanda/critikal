@@ -7,9 +7,7 @@ import Alert from './Alert';
 
 const TextArea = dynamic(import('./TextArea'), {
   ssr: false,
-  loading: () => (
-    <div className="h-60 bg-white border border-indigo-300 mt-2 rounded" />
-  ),
+  loading: () => <div className="h-60 bg-gray-100  mt-2 rounded" />,
 });
 
 interface Props {
