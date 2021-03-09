@@ -28,7 +28,7 @@ export default function Form({ receiverEmail }: Props) {
     sending: false,
   });
   const router = useRouter();
-
+  const { id } = router.query;
   const onEmailSend = async (e: FormEvent) => {
     e.preventDefault();
     setNotification({
@@ -43,6 +43,7 @@ export default function Form({ receiverEmail }: Props) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          id,
           receiverEmail,
           senderEmail: email,
           name,
@@ -65,6 +66,7 @@ export default function Form({ receiverEmail }: Props) {
       <Alert
         show={Boolean(message)}
         duration={5000}
+        autoHide={!sending}
         onHide={() =>
           setNotification({ message: '', success: false, sending: false })
         }

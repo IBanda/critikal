@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 interface Props {
   children: React.ReactNode;
   show: boolean;
+  autoHide: boolean;
   onHide: () => void;
   duration: number;
   className: string;
@@ -12,12 +13,15 @@ export default function Alert({
   children,
   show,
   onHide,
+  autoHide,
   duration,
   className,
 }: Props) {
   useEffect(() => {
-    const timer = setTimeout(() => onHide(), duration);
-    return () => clearTimeout(timer);
+    if (autoHide) {
+      const timer = setTimeout(() => onHide(), duration);
+      return () => clearTimeout(timer);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, show]);
 

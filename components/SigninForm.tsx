@@ -54,6 +54,7 @@ export default function SigninForm() {
       <Alert
         show={Boolean(message)}
         duration={5000}
+        autoHide
         onHide={() => setNotification({ message: '', success: false })}
         className={alertClass}
       >

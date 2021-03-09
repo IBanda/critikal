@@ -1,9 +1,12 @@
 import analyzeText from 'lib/textAnalytics';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import transporter from '../../lib/transporter';
+import Email from 'models/email';
+import db from 'lib/db';
+import transporter from 'lib/transporter';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
+    id,
     receiverEmail,
     senderEmail,
     name,
@@ -12,24 +15,36 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     textMessage,
   } = req.body;
   try {
-    await analyzeText(textMessage);
-    //   headers: {
-    //     "x-priority": "5",
-    //     "x-msmail-priority": "Low",
-    //     importance: "low"
-    // }
+    const textInsights = await analyzeText(textMessage);
+    const isHigh = textInsights.priority === 'high';
+    const messageId = id + Date.now();
+
     await transporter(name).sendMail({
       to: receiverEmail,
       subject,
       text: textMessage,
       html: htmlMessage,
       replyTo: senderEmail,
+      messageId,
       headers: {
-        'x-priority': '1',
-        'x-msmail-priority': 'High',
-        importance: 'high',
+        'x-priority': isHigh ? '1' : '3',
+        'x-msmail-priority': isHigh ? 'High' : 'Normal',
+        importance: isHigh ? 'high' : 'normal',
       },
-      messageId: 'xxxxxxx2020',
+    });
+
+    await db();
+    await Email.create({
+      id: messageId,
+      emailId: id,
+      subject,
+      message: htmlMessage,
+      senderEmail,
+      insights: {
+        sentiment: textInsights.sentiment,
+        keyPhrases: textInsights.keyPhrases,
+        priority: textInsights.priority,
+      },
     });
     res.status(200).json({
       message: 'Message successfully sent',
