@@ -3,13 +3,13 @@ import { useMemo } from 'react';
 export default function SelectFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) {
-  const options = useMemo(() => {
+  const options: string[] = useMemo(() => {
     const opts = new Set();
     preFilteredRows.forEach((row) => {
       opts.add(row.values[id]);
     });
 
-    return [...opts];
+    return Array.from(opts) as string[];
   }, [id, preFilteredRows]);
 
   return (
