@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@azure/ai-text-analytics": "5.1.0-beta.3",
+    "@primer/octicons-react": "^12.1.0",
     "autoprefixer": "^10.2.4",
     "mongoose": "^5.11.18",
     "next": "10.0.7",

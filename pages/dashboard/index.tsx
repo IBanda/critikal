@@ -17,7 +17,12 @@ export default function Index({ id, data }: Props) {
     <Layout>
       <div className="w-full flex flex-col items-center justify-center">
         <LinkCopy id={id} />
-        <DataTable data={data} />
+        <div className="mt-12 grid md:grid-cols-2 w-full">
+          <div className="col-span-1 overflow-y-auto md:overflow-y-visible md:p-4">
+            <DataTable data={data} />
+          </div>
+          <div className="col-span-1"></div>
+        </div>
       </div>
     </Layout>
   );
