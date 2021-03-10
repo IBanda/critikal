@@ -22,24 +22,24 @@ export default function LinkCopy({ id }: Props) {
       <h5 className="block font-medium text-lg tracking-tighter mb-4">
         Form Link
       </h5>
-      <div className="flex items-center">
+      <div className="flex items-center relative">
         <input
           type="text"
           ref={inputRef}
           value={`http://localhost:3000/form/${id}`}
-          className="bg-gray-100 p-2 md:w-80 focus:outline-none"
+          className="bg-gray-100 p-2 md:w-80 focus:outline-none lg:text-sm text-indigo-900"
           readOnly
         />
-        <div className="relative">
+        <div className="absolute right-0 bg-gray-100">
           {showAlert && (
-            <div className="bg-gray-100 absolute text-xs p-1 bottom-12 left-1/2 transform -translate-x-1/2">
+            <div className="bg-gray-100 absolute text-xs p-1 bottom-10 left-1/2 transform -translate-x-1/2">
               Copied!
             </div>
           )}
           <button
             onClick={onCopy}
             type="button"
-            className="focus:outline-none focus:ring-2 focus:border-indigo-300 p-2 border border-indigo-500"
+            className="focus:outline-none focus:ring-2 focus:border-indigo-300 py-1 px-2"
           >
             <img className="w-6" src="/copy.png" alt="copy" />
           </button>
