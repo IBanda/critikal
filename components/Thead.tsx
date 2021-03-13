@@ -17,7 +17,9 @@ export default function Thead({ headerGroups }: Props) {
           {headerGroup.headers.map((column) => (
             <th
               {...column.getHeaderProps({
-                className: 'px-4 pt-4 ',
+                className: `px-4 pt-4 ${
+                  column.id === 'subject' ? 'w-1/2' : 'w-1/4'
+                } `,
                 ...column.getSortByToggleProps(),
               })}
             >
