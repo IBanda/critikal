@@ -5,7 +5,7 @@ import LinkCopy from 'components/LinkCopy';
 import db from 'lib/db';
 import Email from 'models/email';
 import { TableData } from 'lib/interfaces';
-import DataTable from 'components/DataTable';
+import DataTableWithModal from 'components/DatatableWithModal';
 
 interface Props {
   id: string;
@@ -19,7 +19,7 @@ export default function Index({ id, data }: Props) {
         <LinkCopy id={id} />
         <div className="mt-12  w-full">
           <div className="overflow-y-auto md:overflow-y-visible md:p-4">
-            <DataTable data={data} />
+            <DataTableWithModal data={data} />
           </div>
         </div>
       </div>
@@ -64,7 +64,9 @@ export const getServerSideProps: GetServerSideProps = withSession(
         },
       };
     } catch (error) {
-      console.error(error);
+      return {
+        props: {},
+      };
     }
   }
 );

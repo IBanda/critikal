@@ -7,6 +7,7 @@ interface Insight extends Document {
 }
 interface Email extends Document {
   id: string;
+  name: string;
   emailId: string;
   subject: string;
   message: string;
@@ -23,6 +24,7 @@ const InsightSchema: Schema = new Schema({
 
 const EmailSchema: Schema = new Schema({
   id: String,
+  name: String,
   emailId: { type: Schema.Types.ObjectId, ref: 'Subscriber' },
   subject: String,
   message: String,
