@@ -17,6 +17,7 @@ a {
   box-sizing: border-box;
 }
 
+/****** React-quill ******/
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow {
   border: none !important;
@@ -35,11 +36,17 @@ a {
 .ql-editor p {
   font-size: 16px;
 }
+
+/****** React-datepick ******/
+.react-datepicker__day--selected {
+  background-color: #6366f1 !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Make clicks pass-through */
+/****** Nprogress ******/
 #nprogress {
   pointer-events: none;
 }
