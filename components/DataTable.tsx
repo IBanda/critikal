@@ -27,6 +27,15 @@ const columns = [
     accessor: 'priority',
     Filter: SelectFilter,
     disableSortBy: true,
+    Cell: ({ value }) => (
+      <div
+        className={`text-center rounded text-xs text-white py-0.5 px-1 rounded-full bg-${
+          value === 'high' ? 'red' : 'green'
+        }-500`}
+      >
+        {value}
+      </div>
+    ),
   },
   {
     Header: 'Date',
