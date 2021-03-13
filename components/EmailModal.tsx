@@ -20,12 +20,6 @@ export default function EmailModal({ id, onHide }: Props) {
       ) : (
         <>
           <div>
-            <span className="font-medium">Email:</span>
-            <div className="bg-gray-100 p-2 my-2 rounded">
-              <h1>{data.senderEmail}</h1>
-            </div>
-          </div>
-          <div>
             <span className="font-medium">Subject:</span>
             <div className="bg-gray-100 p-2 my-2 rounded">
               <h1>{data.subject}</h1>
@@ -71,6 +65,12 @@ export default function EmailModal({ id, onHide }: Props) {
               className="bg-indigo-500 rounded text-white font-medium tracking-tight p-2 focus:outline-none"
             >
               Resolve
+            </button>
+            <button
+              type="button"
+              className="bg-red-500 text-white font-medium tracking-tight col-span-2 rounded p-2 focus:outline-none"
+            >
+              Delete
             </button>
           </div>
         </>
