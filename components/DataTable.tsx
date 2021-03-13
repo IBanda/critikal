@@ -7,8 +7,13 @@ import SelectFilter from './SelectFilter';
 import Thead from './Thead';
 import Tbody from './Tbody';
 import Tpagination from './Tpagination';
+import DateFilter from './DateFilter';
 
 const columns = [
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
   {
     Header: 'Email',
     accessor: 'email',
@@ -22,6 +27,13 @@ const columns = [
     accessor: 'priority',
     Filter: SelectFilter,
     disableSortBy: true,
+  },
+  {
+    Header: 'Date',
+    accessor: 'date',
+    Filter: DateFilter,
+    filter: 'between',
+    Cell: ({ value }) => new Date(Number(value)).toLocaleDateString(),
   },
 ];
 

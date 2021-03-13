@@ -31,9 +31,11 @@ function formatData(data): TableData[] {
   const dataCopy = [...data];
   return dataCopy.map((item) => ({
     id: item.id,
+    name: item.name,
     email: item.senderEmail,
     subject: item.subject,
     priority: item.insights.priority,
+    date: item.created_on,
   }));
 }
 export const getServerSideProps: GetServerSideProps = withSession(
@@ -52,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       await db();
       const emails = await Email.find(
         { emailId: subscriber.id },
-        'id senderEmail subject insights'
+        'id name senderEmail subject insights created_on'
       );
       if (emails.length) {
         data = formatData(emails);
