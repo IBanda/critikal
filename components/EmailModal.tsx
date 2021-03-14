@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import { useState } from 'react';
 import useSWR from 'swr';
+import Alert from 'components/Alert';
+import Button from './Button';
 import Modal from './Modal';
 
 interface Props {
@@ -7,11 +11,34 @@ interface Props {
 }
 
 export default function EmailModal({ id, onHide }: Props) {
+  const [{ message, success }, setNotification] = useState({
+    message: '',
+    success: false,
+  });
+  const [action, setAction] = useState('');
   const { data, error } = useSWR(`/api/email?id=${id}`, (url) =>
     fetch(url).then((res) => res.json())
   );
   const isLoading = !data && !error;
   const isHighPriority = data?.insights?.priority === 'high';
+
+  const onUpdateStatus = async (event) => {
+    const btn = event.target.closest('button').id;
+    const status = btn === 'actionable' ? 'actionable' : 'resolved';
+    setAction(status);
+    const res = await callApi(id, status);
+    setAction('');
+    setNotification(res);
+  };
+
+  const onDelete = async () => {
+    setAction('delete');
+    const res = await callApi(id);
+    setAction('');
+    setNotification(res);
+    await new Promise((r) => setTimeout(r, 500));
+    onHide();
+  };
 
   return (
     <Modal show={Boolean(id)} onHide={onHide}>
@@ -19,6 +46,15 @@ export default function EmailModal({ id, onHide }: Props) {
         <h2>Loading...</h2>
       ) : (
         <>
+          <Alert
+            show={Boolean(message)}
+            duration={5000}
+            autoHide
+            onHide={() => setNotification({ message: '', success: false })}
+            className={`mt-2 ${success ? 'bg-green-500' : 'bg-red-500'}`}
+          >
+            {message}
+          </Alert>
           <div>
             <span className="font-medium">Subject:</span>
             <div className="bg-gray-100 p-2 my-2 rounded">
@@ -54,27 +90,41 @@ export default function EmailModal({ id, onHide }: Props) {
             </ul>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <button
-              type="button"
-              className="bg-green-500 rounded text-white font-medium tracking-tight p-2 focus:outline-none"
+            <Button
+              id="actionable"
+              onClick={onUpdateStatus}
+              className="bg-green-500 p-2"
             >
-              Actionable
-            </button>
-            <button
-              type="button"
-              className="bg-indigo-500 rounded text-white font-medium tracking-tight p-2 focus:outline-none"
+              {action === 'actionable' ? '...' : 'Actionable'}
+            </Button>
+            <Button
+              onClick={onUpdateStatus}
+              id="resolve"
+              className="bg-indigo-500 p-2 "
             >
-              Resolve
-            </button>
-            <button
-              type="button"
-              className="bg-red-500 text-white font-medium tracking-tight col-span-2 rounded p-2 focus:outline-none"
-            >
-              Delete
-            </button>
+              {action === 'resolved' ? '...' : 'Resolve'}
+            </Button>
+            <Button onClick={onDelete} className="bg-red-500 p-2 col-span-2">
+              {action === 'delete' ? '...' : 'Delete'}
+            </Button>
           </div>
         </>
       )}
     </Modal>
   );
+}
+
+async function callApi(id: string, status?: string) {
+  try {
+    const res = await fetch(`/api/email?id=${id}&status=${status}`, {
+      method: status ? 'PATCH' : 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
 }
