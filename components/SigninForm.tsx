@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import useSubscriber from 'lib/useSubscriber';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Alert from './Alert';
 import Input from './Input';
+import Button from './Button';
 
 export default function SigninForm() {
   const [email, setEmail] = useState('');
@@ -16,14 +17,6 @@ export default function SigninForm() {
     redirect: true,
     redirectPath: '/dashboard/',
   });
-
-  useEffect(() => {
-    const timer = setTimeout(
-      () => setNotification({ message: '', success: null }),
-      5000
-    );
-    return () => clearTimeout(timer);
-  }, [success]);
 
   const onSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -81,12 +74,9 @@ export default function SigninForm() {
           autoComplete="off"
         />
       </label>
-      <button
-        className="mt-4 bg-indigo-600 w-full p-3 text-white font-medium tracking-tighter rounded focus:outline-none focus:ring-2 focus:border-indigo-300"
-        type="submit"
-      >
+      <Button className="mt-4 bg-indigo-600 w-full p-3 " type="submit">
         Sign In
-      </button>
+      </Button>
       <div className="text-sm tracking-tight mt-4">
         Don&apos;t have an account?
         <Link href="/">
