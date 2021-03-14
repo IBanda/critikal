@@ -7,9 +7,9 @@ export interface NextApiReqWithSession extends NextApiRequest {
 
 export interface TableData {
   id: string;
-  name: string;
   email: string;
   subject: string;
   priority: string;
   date: string;
+  status: string;
 }
