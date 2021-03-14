@@ -13,6 +13,7 @@ interface Email extends Document {
   message: string;
   senderEmail: string;
   insights: Insight;
+  status: 'open' | 'actionable' | 'resolved';
   created_on: string;
 }
 
@@ -30,6 +31,7 @@ const EmailSchema: Schema = new Schema({
   message: String,
   senderEmail: String,
   insights: InsightSchema,
+  status: { type: String, default: 'open' },
   created_on: { type: String, default: Date.now() },
 });
 
