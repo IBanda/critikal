@@ -11,10 +11,6 @@ import DateFilter from './DateFilter';
 
 const columns = [
   {
-    Header: 'Name',
-    accessor: 'name',
-  },
-  {
     Header: 'Email',
     accessor: 'email',
   },
@@ -43,6 +39,11 @@ const columns = [
     Filter: DateFilter,
     filter: 'between',
     Cell: ({ value }) => new Date(Number(value)).toLocaleDateString(),
+  },
+  {
+    Header: 'Status',
+    accessor: 'status',
+    Filter: SelectFilter,
   },
 ];
 
