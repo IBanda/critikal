@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useState } from 'react';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import Alert from 'components/Alert';
 import Button from './Button';
 import Modal from './Modal';
@@ -29,6 +29,7 @@ export default function EmailModal({ id, onHide }: Props) {
     const res = await callApi(id, status);
     setAction('');
     setNotification(res);
+    mutate('/api/email');
   };
 
   const onDelete = async () => {
@@ -36,6 +37,7 @@ export default function EmailModal({ id, onHide }: Props) {
     const res = await callApi(id);
     setAction('');
     setNotification(res);
+    mutate('/api/email');
     await new Promise((r) => setTimeout(r, 500));
     onHide();
   };
