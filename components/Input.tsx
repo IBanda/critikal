@@ -12,7 +12,7 @@ export default function Input({ value, onChange, className, ...props }: Props) {
     <input
       onChange={onChange}
       value={value}
-      className={`my-2 w-full  p-3 bg-gray-100 rounded focus:outline-none focus:ring-2 focus:border-indigo-300 ${className}`}
+      className={`my-2 w-full  p-3 bg-indigo-100 rounded focus:outline-none focus:ring-2 focus:border-indigo-300 ${className}`}
       required
       {...props}
     />

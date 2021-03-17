@@ -7,7 +7,7 @@ import Alert from './Alert';
 
 const TextArea = dynamic(import('./TextArea'), {
   ssr: false,
-  loading: () => <div className="h-60 bg-gray-100  mt-2 rounded" />,
+  loading: () => <div className="h-60 bg-indigo-100  mt-2 rounded" />,
 });
 
 interface Props {
@@ -109,7 +109,7 @@ export default function Form({ receiverEmail }: Props) {
       />
       <button
         type="submit"
-        className="w-full rounded bg-indigo-500 font-medium tracking-tighter text-white p-2 mt-4"
+        className="w-full rounded bg-gray-900 font-medium tracking-tighter text-white p-2 mt-4"
       >
         Send
       </button>

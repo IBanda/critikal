@@ -1,5 +1,6 @@
 import useSubscriber from 'lib/useSubscriber';
 import { useRouter } from 'next/router';
+import Button from './Button';
 
 export default function Header() {
   const { mutateSubscriber } = useSubscriber({});
@@ -11,14 +12,16 @@ export default function Header() {
   };
   return (
     <header className="flex items-center justify-between px-3 mb-8">
-      <img src="/logo.png" className="w-16" alt="logo" />
-      <button
+      <div className="bg-gray-900 p-2 text-white tracking-tight font-bold shadow-lg text-xl">
+        Critikal
+      </div>
+      <Button
         type="button"
-        className="text-white bg-indigo-500 py-2 px-3 font-medium text-sm tracking-tighter rounded"
+        className="py-2 px-3 indigo  text-sm "
         onClick={onLogout}
       >
         Logout
-      </button>
+      </Button>
     </header>
   );
 }

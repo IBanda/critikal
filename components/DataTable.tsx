@@ -2,6 +2,7 @@
 import { useMemo } from 'react';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
 import { TableData } from 'lib/interfaces';
+import isInRange from 'utils/isInRange';
 import FilterInput from './FilterInput';
 import SelectFilter from './SelectFilter';
 import Thead from './Thead';
@@ -37,7 +38,14 @@ const columns = [
     Header: 'Date',
     accessor: 'date',
     Filter: DateFilter,
-    filter: 'between',
+    filter: (rows, _, value) => {
+      const filteredRows = rows.filter((row) => {
+        const { date } = row.values;
+        return isInRange(Number(date), value);
+      });
+      console.log(filteredRows);
+      return filteredRows;
+    },
     Cell: ({ value }) => new Date(Number(value)).toLocaleDateString(),
   },
   {
@@ -82,10 +90,10 @@ export default function DataTable({ data, setId }: Props) {
   );
 
   return (
-    <div className="md:shadow-lg md:overflow-hidden">
+    <div className="md:shadow-lg md:overflow-hidden bg-white   rounded">
       <table
         {...getTableProps({
-          className: 'md:table-fixed  text-sm w-full  text-left',
+          className: 'lg:table-fixed bg-gray-100 text-sm w-full  text-left',
           style: { borderSpacing: '2em' },
         })}
       >
@@ -98,6 +106,7 @@ export default function DataTable({ data, setId }: Props) {
         />
       </table>
       <Tpagination
+        page={page}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
         pageOptions={pageOptions}

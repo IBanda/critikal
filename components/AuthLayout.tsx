@@ -1,18 +1,21 @@
 interface Props {
   children: React.ReactNode;
+  imgSrc: string;
 }
 
-export default function AuthLayout({ children }: Props) {
+export default function AuthLayout({ children, imgSrc }: Props) {
   return (
-    <div className="grid md:grid-cols-3 h-full ">
-      <div className="col-span-1 hidden md:flex flex-col items-center justify-center bg-gradient-to-r from-pink-400 via-red-500 to-indigo-500">
+    <div className="grid md:grid-cols-5 h-full ">
+      <div className="col-span-2 hidden md:flex flex-col items-center justify-center bg-gray-900 shadow-lg">
         <h1 className="text-white mb-8 font-bold tracking-tighter text-center text-5xl">
-          Turn your inbox into a feeback system.
+          Turn your mailbox into a feedback system.
         </h1>
-        <img className="max-w-sm" src="/world.svg" alt="signup" />
+        <img className="max-w-md" src={`/${imgSrc}.svg`} alt="messages" />
       </div>
-      <div className="col-span-2 flex flex-col  justify-center items-center py-20 container">
-        <img className="w-24 mx-auto mb-8" src="logo.png" alt="logo" />
+      <div className="col-span-3 flex flex-col  justify-center items-center py-20 container">
+        <div className="bg-gray-900 shadow-inner p-2 text-white tracking-tight font-bold mb-8  text-2xl">
+          Critikal
+        </div>
         {children}
       </div>
     </div>

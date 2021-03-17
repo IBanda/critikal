@@ -59,13 +59,13 @@ export default function EmailModal({ id, onHide }: Props) {
           </Alert>
           <div>
             <span className="font-medium">Subject:</span>
-            <div className="bg-gray-100 p-2 my-2 rounded">
+            <div className="bg-indigo-100 p-2 my-2 rounded">
               <h1>{data.subject}</h1>
             </div>
           </div>
           <div>
             <span className="font-medium">Message:</span>
-            <div className="h-36 overflow-auto bg-gray-100 my-2 p-2 rounded">
+            <div className="h-36 overflow-auto bg-indigo-100 my-2 p-2 rounded">
               <div dangerouslySetInnerHTML={{ __html: data.message }} />
             </div>
           </div>
@@ -80,10 +80,10 @@ export default function EmailModal({ id, onHide }: Props) {
             </div>
           </div>
           <div className="mb-4">
-            <ul className="flex flex-wrap">
+            <ul className="flex flex-wrap max-h-12 overflow-auto">
               {data.insights.keyPhrases.map((phrase) => (
                 <li
-                  className="mr-1 bg-indigo-500 rounded px-1.5 py-0.5 text-white text-xs"
+                  className="mr-1 mb-0.5 bg-green-500 rounded px-1.5 py-0.5 text-white text-xs"
                   key={phrase}
                 >
                   {phrase}
@@ -94,19 +94,21 @@ export default function EmailModal({ id, onHide }: Props) {
           <div className="grid grid-cols-2 gap-4">
             <Button
               id="actionable"
+              disabled={data.status === 'actionable'}
               onClick={onUpdateStatus}
-              className="bg-green-500 p-2"
+              className="bg-gray-900 p-2"
             >
               {action === 'actionable' ? '...' : 'Actionable'}
             </Button>
             <Button
               onClick={onUpdateStatus}
+              disabled={data.status === 'resolved'}
               id="resolve"
-              className="bg-indigo-500 p-2 "
+              className="bg-gray-900 p-2 "
             >
               {action === 'resolved' ? '...' : 'Resolve'}
             </Button>
-            <Button onClick={onDelete} className="bg-red-500 p-2 col-span-2">
+            <Button onClick={onDelete} className="bg-gray-900 p-2 col-span-2">
               {action === 'delete' ? '...' : 'Delete'}
             </Button>
           </div>

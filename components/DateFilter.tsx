@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import getTime from 'utils/getTime';
 
-function getTime(date: string) {
-  return new Date(date).getTime();
-}
 export default function DateFilter({ column: { setFilter } }) {
   const [startDate, setStateDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+
   return (
     <div className="flex items-center ">
       <div>
         <DatePicker
           selected={startDate}
-          className="bg-gray-100 rounded focus:outline-none focus:ring-2 focus:border-indigo-300 w-20 px-0.5 py-1"
+          className="bg-indigo-100 rounded focus:outline-none focus:ring-2 focus:border-indigo-300 w-20 px-0.5 py-1"
           maxDate={endDate}
           onChange={(date) => {
             setStateDate(date);
@@ -29,10 +28,13 @@ export default function DateFilter({ column: { setFilter } }) {
         <DatePicker
           selected={endDate}
           minDate={startDate}
-          className="bg-gray-100 rounded focus:outline-none focus:ring-2 focus:border-indigo-300 w-20 px-0.5 py-1"
+          className="bg-indigo-100 rounded focus:outline-none focus:ring-2 focus:border-indigo-300 w-20 px-0.5 py-1"
           onChange={(date) => {
             setEndDate(date);
-            setFilter((prev) => [prev?.[0], getTime(date)]);
+            setFilter((prev) => [
+              prev?.[0] || startDate.getTime(),
+              getTime(date),
+            ]);
           }}
         />
       </div>

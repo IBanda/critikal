@@ -1,3 +1,4 @@
+import { CopyIcon } from '@primer/octicons-react';
 import { useEffect, useRef, useState } from 'react';
 
 interface Props {
@@ -19,8 +20,8 @@ export default function LinkCopy({ id }: Props) {
   };
   return (
     <>
-      <h5 className="block font-medium text-lg tracking-tighter mb-4">
-        Form Link
+      <h5 className="block font-medium text-white text-lg tracking-tighter mb-4">
+        Form Url
       </h5>
       <div className="flex items-center relative">
         <input
@@ -32,7 +33,7 @@ export default function LinkCopy({ id }: Props) {
         />
         <div className="absolute right-0 bg-gray-100">
           {showAlert && (
-            <div className="bg-gray-100 absolute text-xs p-1 bottom-10 left-1/2 transform -translate-x-1/2">
+            <div className="bg-indigo-100 absolute text-xs p-1 bottom-10 left-1/2 transform -translate-x-1/2">
               Copied!
             </div>
           )}
@@ -41,7 +42,7 @@ export default function LinkCopy({ id }: Props) {
             type="button"
             className="focus:outline-none focus:ring-2 focus:border-indigo-300 py-1 px-2"
           >
-            <img className="w-6" src="/copy.png" alt="copy" />
+            <CopyIcon />
           </button>
         </div>
       </div>

@@ -58,6 +58,7 @@ export default function SignupForm() {
         Name
         <Input
           id="name"
+          data-testid="name"
           type="text"
           onChange={(e) => setName(e.target.value)}
           value={name}
@@ -67,6 +68,7 @@ export default function SignupForm() {
         Email
         <Input
           id="email"
+          data-testid="email"
           type="email"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
@@ -77,13 +79,14 @@ export default function SignupForm() {
         Password
         <Input
           id="password"
+          data-testid="password"
           type="password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           autoComplete="off"
         />
       </label>
-      <Button className="mt-4 bg-indigo-600 w-full p-3 " type="submit">
+      <Button className="mt-4 bg-gray-900 w-full p-3 " type="submit">
         Sign Up
       </Button>
       <div className="text-sm tracking-tight mt-4">

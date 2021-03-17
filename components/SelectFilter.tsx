@@ -14,7 +14,7 @@ export default function SelectFilter({
 
   return (
     <select
-      className="bg-gray-100 text-black my-2  rounded py-1 w-full focus:outline-none focus:ring-2 focus:border-indigo-300"
+      className="bg-indigo-100 text-black my-2  rounded py-1 w-full focus:outline-none focus:ring-2 focus:border-indigo-300"
       value={filterValue}
       onChange={(e) => setFilter(e.target.value || undefined)}
     >

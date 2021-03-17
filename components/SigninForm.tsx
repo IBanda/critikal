@@ -74,7 +74,7 @@ export default function SigninForm() {
           autoComplete="off"
         />
       </label>
-      <Button className="mt-4 bg-indigo-600 w-full p-3 " type="submit">
+      <Button className="mt-4 bg-gray-900 w-full p-3 " type="submit">
         Sign In
       </Button>
       <div className="text-sm tracking-tight mt-4">
