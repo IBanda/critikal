@@ -1,9 +1,8 @@
 import type { GetServerSideProps } from 'next';
 import Layout from 'components/Layout';
 import withSession from 'lib/session';
-import LinkCopy from 'components/LinkCopy';
 import db from 'lib/db';
-import Email from 'models/email';
+import Email from 'models/message';
 import { TableData } from 'lib/interfaces';
 import DataTableWithModal from 'components/DatatableWithModal';
 import useSWR from 'swr';
@@ -19,11 +18,10 @@ export default function Index({ id, data }: Props) {
     initialData: data,
   });
   return (
-    <Layout>
+    <Layout id={id}>
       <div className="w-full flex flex-col items-center justify-center">
-        <LinkCopy id={id} />
         <div className="mt-12  w-full">
-          <div className="overflow-y-auto md:overflow-y-visible md:p-4">
+          <div className="overflow-y-auto lg:overflow-y-visible lg:p-4">
             <DataTableWithModal data={tableData} />
           </div>
         </div>
@@ -47,8 +45,8 @@ export const getServerSideProps: GetServerSideProps = withSession(
       let data = [];
       await db();
       const emails = await Email.find(
-        { emailId: subscriber.id },
-        'id senderEmail subject insights created_on'
+        { receiver: subscriber.id },
+        'id senderEmail subject insights created_on status'
       );
       if (emails.length) {
         data = formatData(emails);

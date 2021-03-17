@@ -5,7 +5,7 @@ import AuthLayout from 'components/AuthLayout';
 
 export default function SignUp() {
   return (
-    <AuthLayout>
+    <AuthLayout imgSrc="Mailbox-bro">
       <SignupForm />
     </AuthLayout>
   );
