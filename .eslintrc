@@ -12,6 +12,7 @@
     "consistent-return": "off",
     "func-names": "off",
     "no-underscore-dangle": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "import/no-extraneous-dependencies": "off"
   }
 }
