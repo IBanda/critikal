@@ -1,11 +1,13 @@
 import analyzeText from 'lib/textAnalytics';
 import type { NextApiResponse } from 'next';
-import Email from 'models/email';
+import Message from 'models/message';
 import db from 'lib/db';
 import transporter from 'lib/transporter';
 import withSession from 'lib/session';
 import { NextApiReqWithSession } from 'lib/interfaces';
 import formatData from 'utils/formatData';
+import markSentences from 'utils/markSentences';
+import underlineOpinions from 'utils/underlineOpinions';
 
 export default withSession(
   async (req: NextApiReqWithSession, res: NextApiResponse) => {
@@ -27,11 +29,19 @@ export default withSession(
           const isHigh = textInsights.priority === 'high';
           const messageId = id + Date.now();
 
+          const markedMessage = markSentences(
+            textInsights.sentences,
+            htmlMessage
+          );
+          const opinionatedMessage = underlineOpinions(
+            textInsights.opnions,
+            markedMessage
+          );
           await transporter(name).sendMail({
             to: receiverEmail,
             subject,
             text: textMessage,
-            html: htmlMessage,
+            html: opinionatedMessage,
             replyTo: senderEmail,
             messageId,
             headers: {
@@ -41,12 +51,12 @@ export default withSession(
             },
           });
 
-          await Email.create({
+          await Message.create({
             id: messageId,
             name,
-            emailId: id,
+            receiver: id,
             subject,
-            message: htmlMessage,
+            message: opinionatedMessage,
             senderEmail,
             insights: {
               sentiment: textInsights.sentiment,
@@ -63,13 +73,13 @@ export default withSession(
         case 'GET': {
           const { id } = req.query;
           if (id) {
-            const email = await Email.findOne({ id: String(id) });
+            const email = await Message.findOne({ id: String(id) });
             res.status(200).json(email);
           } else {
             let data = [];
-            const emails = await Email.find(
-              { emailId: subscriber.id },
-              'id senderEmail subject insights created_on'
+            const emails = await Message.find(
+              { receiver: subscriber.id },
+              'id senderEmail subject insights created_on status'
             );
             if (emails.length) {
               data = formatData(emails);
@@ -80,9 +90,8 @@ export default withSession(
         }
         case 'PATCH': {
           const { id, status } = req.query;
-
           if (status === 'actionable' || status === 'resolved') {
-            await Email.findOneAndUpdate({ id: String(id) }, { status });
+            await Message.findOneAndUpdate({ id: String(id) }, { status });
             res
               .status(200)
               .json({ message: 'status successfully updated', success: true });
@@ -91,7 +100,7 @@ export default withSession(
         }
         case 'DELETE': {
           const { id } = req.query;
-          await Email.findOneAndDelete({ id: String(id) });
+          await Message.findOneAndDelete({ id: String(id) });
           res
             .status(200)
             .json({ message: 'Message succssfully deleted', success: true });
