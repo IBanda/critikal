@@ -5,10 +5,10 @@ interface Insight extends Document {
   keyPhrases: string[];
   priority: string;
 }
-interface Email extends Document {
+interface Message extends Document {
   id: string;
   name: string;
-  emailId: string;
+  receiver: string;
   subject: string;
   message: string;
   senderEmail: string;
@@ -23,10 +23,10 @@ const InsightSchema: Schema = new Schema({
   priority: { type: String, default: 'normal' },
 });
 
-const EmailSchema: Schema = new Schema({
+const MessageSchema: Schema = new Schema({
   id: String,
   name: String,
-  emailId: { type: Schema.Types.ObjectId, ref: 'Subscriber' },
+  receiver: { type: Schema.Types.ObjectId, ref: 'Subscriber' },
   subject: String,
   message: String,
   senderEmail: String,
@@ -35,6 +35,7 @@ const EmailSchema: Schema = new Schema({
   created_on: { type: String, default: Date.now() },
 });
 
-const EmailModel: Model<Email> = models.Email || model('Email', EmailSchema);
+const MessageModel: Model<Message> =
+  models.Message || model('Message', MessageSchema);
 
-export default EmailModel;
+export default MessageModel;
