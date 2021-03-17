@@ -18,6 +18,12 @@ const config: Config.InitialOptions = {
   ],
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
+    '^components(.*)$': '<rootDir>/components/$1',
+    '^utils(.*)$': '<rootDir>/utils/$1',
+    '^lib(.*)$': '<rootDir>/lib/$1',
+    '^mocks(.*)$': '<rootDir>/mocks/$1',
+    '^pages(.*)$': '<rootDir>/pages/$1',
+    '^models(.*)$': '<rootDir>/models/$1',
   },
 };
 export default config;
