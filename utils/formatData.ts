@@ -8,6 +8,6 @@ export default function formatData(data): TableData[] {
     subject: item.subject,
     priority: item.insights.priority,
     date: item.created_on,
-    status: item.status || '',
+    status: item.status,
   }));
 }
