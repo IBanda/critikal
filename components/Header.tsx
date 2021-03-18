@@ -1,5 +1,6 @@
 import useSubscriber from 'lib/useSubscriber';
 import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 import Button from './Button';
 
 export default function Header() {
@@ -9,6 +10,7 @@ export default function Header() {
     await fetch('/api/logout');
     mutateSubscriber();
     router.push('/signin');
+    mutate('/api/email');
   };
   return (
     <header className="flex items-center justify-between px-3 mb-8">

@@ -72,6 +72,9 @@ export default withSession(
         }
         case 'GET': {
           const { id } = req.query;
+          if (!subscriber) {
+            return res.json([]);
+          }
           if (id) {
             const email = await Message.findOne({ id: String(id) });
             res.status(200).json(email);
