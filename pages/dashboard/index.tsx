@@ -17,12 +17,18 @@ export default function Index({ id, data }: Props) {
   const { data: tableData } = useSWR('/api/email', fetcher, {
     initialData: data,
   });
+
+  // Data from another session remains until the key is revalidated
+  // which means another user can see data that's not theres
+
+  const revalidationSafeData = !tableData.length ? data : tableData;
+
   return (
     <Layout id={id}>
       <div className="w-full flex flex-col items-center justify-center">
         <div className="mt-12  w-full">
           <div className="overflow-y-auto lg:overflow-y-visible lg:p-4">
-            <DataTableWithModal data={tableData} />
+            <DataTableWithModal data={revalidationSafeData} />
           </div>
         </div>
       </div>
@@ -51,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       if (emails.length) {
         data = formatData(emails);
       }
+      console.log(data);
       return {
         props: {
           id: subscriber.id,
