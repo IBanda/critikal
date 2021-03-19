@@ -23,7 +23,7 @@ export default function LinkCopy({ id }: Props) {
       <h5 className="block font-medium text-white text-lg tracking-tighter mb-4">
         Form Url
       </h5>
-      <div className="flex items-center relative">
+      <div className="flex items-center rounded relative">
         <input
           type="text"
           ref={inputRef}

@@ -12,13 +12,11 @@ export default function Layout({ children, id }: Props) {
       <div className="bg-gray-900">
         <div className="container pb-12">
           <Header />
-
           <div className="flex flex-col items-center justify-center">
             <LinkCopy id={id} />
           </div>
         </div>
       </div>
-
       <div className="container">{children}</div>
     </>
   );

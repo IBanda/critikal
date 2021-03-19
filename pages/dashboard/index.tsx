@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
       if (emails.length) {
         data = formatData(emails);
       }
-      console.log(data);
+
       return {
         props: {
           id: subscriber.id,

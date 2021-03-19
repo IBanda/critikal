@@ -43,7 +43,6 @@ const columns = [
         const { date } = row.values;
         return isInRange(Number(date), value);
       });
-      console.log(filteredRows);
       return filteredRows;
     },
     Cell: ({ value }) => new Date(Number(value)).toLocaleDateString(),
@@ -90,11 +89,10 @@ export default function DataTable({ data, setId }: Props) {
   );
 
   return (
-    <div className="md:shadow-lg md:overflow-hidden bg-white   rounded">
+    <div className="md:shadow-lg lg:overflow-hidden bg-white w-max md:w-full rounded mb-8">
       <table
         {...getTableProps({
-          className: 'lg:table-fixed bg-gray-100 text-sm w-full  text-left',
-          style: { borderSpacing: '2em' },
+          className: 'xl:table-fixed bg-gray-100 text-sm w-full  text-left',
         })}
       >
         <Thead headerGroups={headerGroups} />

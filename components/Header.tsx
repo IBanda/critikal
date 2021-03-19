@@ -2,6 +2,7 @@ import useSubscriber from 'lib/useSubscriber';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import Button from './Button';
+import TagModalBtn from './TagModalBtn';
 
 export default function Header() {
   const { mutateSubscriber } = useSubscriber({});
@@ -17,13 +18,16 @@ export default function Header() {
       <div className="bg-gray-900 p-2 text-white tracking-tight font-bold shadow-lg text-xl">
         Critikal
       </div>
-      <Button
-        type="button"
-        className="py-2 px-3 indigo  text-sm "
-        onClick={onLogout}
-      >
-        Logout
-      </Button>
+      <div>
+        <TagModalBtn />
+        <Button
+          type="button"
+          className="py-2 px-3   text-sm "
+          onClick={onLogout}
+        >
+          Logout
+        </Button>
+      </div>
     </header>
   );
 }

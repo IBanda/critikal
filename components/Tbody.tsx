@@ -39,7 +39,7 @@ export default function Tbody({
       ) : (
         <tr>
           <td>
-            <h1 className="px-4 tracking-tight  text-gray-900 font-bold text-lg">
+            <h1 className="px-4 tracking-tight whitespace-nowrap  text-gray-900 font-bold text-lg">
               No Messages
             </h1>
           </td>
