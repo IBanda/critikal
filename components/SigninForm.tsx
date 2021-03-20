@@ -41,7 +41,6 @@ export default function SigninForm() {
       setNotification(err);
     }
   };
-  const alertClass = success ? 'bg-green-500' : 'bg-red-500';
   return (
     <form className="max-w-md" onSubmit={onSignUp}>
       <Alert
@@ -49,7 +48,7 @@ export default function SigninForm() {
         duration={5000}
         autoHide
         onHide={() => setNotification({ message: '', success: false })}
-        className={alertClass}
+        className={success ? 'bg-green-500' : 'bg-red-500'}
       >
         {message}
       </Alert>
