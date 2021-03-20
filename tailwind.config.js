@@ -27,6 +27,12 @@ module.exports = {
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
       none: 'none',
     },
+    borderColor: (theme) => ({
+      ...theme('colors'),
+      mixed: `${theme('colors')['blue'][100]} ${
+        theme('colors')['blue'][100]
+      } #fff`,
+    }),
   },
   variants: {
     extend: {
