@@ -36,7 +36,7 @@ export default function TagForm() {
       formData.append('cols', JSON.stringify(extractColumns(cols)));
     }
 
-    const res = await fetch('/api/upload', {
+    const res = await fetch('/api/tag', {
       method: 'POST',
       body: formData,
     });
