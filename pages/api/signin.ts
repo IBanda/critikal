@@ -9,9 +9,7 @@ export default withSession(
     const { email, password } = req.body;
     try {
       await db();
-
-      const existingSubscriber = await Subscriber.findOne({ email });
-
+      const existingSubscriber = await Subscriber.exists({ email });
       if (!existingSubscriber) {
         return res.status(404).json({
           message: `Subscriber with this email doesn't exist, please sign up`,

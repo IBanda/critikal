@@ -10,8 +10,7 @@ export default withSession(
     try {
       await db();
 
-      const existingSubscriber = await Subscriber.findOne({ email });
-
+      const existingSubscriber = await Subscriber.exists({ email });
       if (existingSubscriber) {
         return res.status(400).json({
           message: 'Subscriber with this email already exists',
