@@ -16,12 +16,16 @@ export default function Tbody({
       {page.length ? (
         page.map((row) => {
           prepareRow(row);
+
           return (
             <tr
               onClick={() => setId(row.original.id)}
               {...row.getRowProps({
-                className:
-                  'text-indigo-900 tracking-tight odd:bg-indigo-200 cursor-pointer',
+                className: `text-indigo-900 tracking-tight ${
+                  row.original.hasListedTags
+                    ? 'bg-pink-200'
+                    : 'odd:bg-indigo-200'
+                } cursor-pointer`,
               })}
             >
               {row.cells.map((cell) => (

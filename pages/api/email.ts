@@ -2,12 +2,14 @@ import analyzeText from 'lib/textAnalytics';
 import type { NextApiResponse } from 'next';
 import Message from 'models/message';
 import db from 'lib/db';
+import Tag from 'models/tag';
 import transporter from 'lib/transporter';
 import withSession from 'lib/session';
 import { NextApiReqWithSession } from 'lib/interfaces';
 import formatData from 'utils/formatData';
 import markSentences from 'utils/markSentences';
 import underlineOpinions from 'utils/underlineOpinions';
+import modifyResult from 'utils/modifyResult';
 
 export default withSession(
   async (req: NextApiReqWithSession, res: NextApiResponse) => {
@@ -85,7 +87,8 @@ export default withSession(
               'id senderEmail subject insights created_on status'
             );
             if (emails.length) {
-              data = formatData(emails);
+              const { tags } = await Tag.findOne({ subscriber: subscriber.id });
+              data = formatData(emails, modifyResult(tags));
             }
             res.status(200).json(data);
           }
