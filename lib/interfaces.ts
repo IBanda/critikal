@@ -10,6 +10,8 @@ export interface TableData {
   email: string;
   subject: string;
   priority: string;
+  keyPhrases: string[];
+  hasListedTags: boolean;
   date: string;
   status: string;
 }
