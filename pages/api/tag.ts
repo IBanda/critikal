@@ -70,6 +70,19 @@ export default withSession(
           message = { message: 'Tags were successfully created' };
         });
         res.json(message);
+      } else if (req.method === 'GET') {
+        const { tags } = await Tag.findOne({ subscriber: subscriber.id });
+        res.status(200).json(tags);
+      } else if (req.method === 'DELETE') {
+        const { tags } = req.query;
+        await Tag.updateOne(
+          { subscriber: subscriber.id },
+          {
+            $pull: { tags: { $in: tags } },
+          },
+          { multi: true }
+        );
+        res.json({ message: 'Successfully deleted ', success: true });
       }
     } catch (error) {
       res
