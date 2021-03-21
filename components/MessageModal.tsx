@@ -66,7 +66,7 @@ export default function MessageModal({ id, onHide }: Props) {
           </div>
           <div>
             <span className="font-medium">Message:</span>
-            <div className="h-36 overflow-auto bg-indigo-100 my-2 p-2 rounded">
+            <div className="max-h-36 overflow-auto bg-indigo-100 my-2 p-2 rounded">
               <div dangerouslySetInnerHTML={{ __html: data.message }} />
             </div>
           </div>
