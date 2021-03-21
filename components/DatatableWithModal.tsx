@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TableData } from 'lib/interfaces';
 import DataTable from './DataTable';
-import EmailModal from './EmailModal';
+import MessageModal from './MessageModal';
 
 interface Props {
   data: TableData[];
@@ -16,7 +16,7 @@ export default function DataTableWithModal({ data }: Props) {
   return (
     <>
       <DataTable data={data} setId={setId} />
-      {Boolean(id) && <EmailModal id={id} onHide={resetId} />}
+      {Boolean(id) && <MessageModal id={id} onHide={resetId} />}
     </>
   );
 }
