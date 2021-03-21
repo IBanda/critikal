@@ -10,13 +10,13 @@ interface Props {
   onHide: () => void;
 }
 
-export default function EmailModal({ id, onHide }: Props) {
+export default function MessageModal({ id, onHide }: Props) {
   const [{ message, success }, setNotification] = useState({
     message: '',
     success: false,
   });
   const [action, setAction] = useState('');
-  const { data, error } = useSWR(`/api/email?id=${id}`, (url) =>
+  const { data, error } = useSWR(`/api/message?id=${id}`, (url) =>
     fetch(url).then((res) => res.json())
   );
   const isLoading = !data && !error;
@@ -29,7 +29,8 @@ export default function EmailModal({ id, onHide }: Props) {
     const res = await callApi(id, status);
     setAction('');
     setNotification(res);
-    mutate('/api/email');
+    mutate('/api/message');
+    mutate(`/api/message?id=${id}`);
   };
 
   const onDelete = async () => {
@@ -37,7 +38,7 @@ export default function EmailModal({ id, onHide }: Props) {
     const res = await callApi(id);
     setAction('');
     setNotification(res);
-    mutate('/api/email');
+    mutate('/api/message');
     await new Promise((r) => setTimeout(r, 500));
     onHide();
   };
@@ -120,7 +121,7 @@ export default function EmailModal({ id, onHide }: Props) {
 
 async function callApi(id: string, status?: string) {
   try {
-    const res = await fetch(`/api/email?id=${id}&status=${status}`, {
+    const res = await fetch(`/api/message?id=${id}&status=${status}`, {
       method: status ? 'PATCH' : 'DELETE',
       headers: {
         'Content-Type': 'application/json',
