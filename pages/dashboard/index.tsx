@@ -17,7 +17,7 @@ interface Props {
 }
 const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Index({ id, data }: Props) {
-  const { data: tableData } = useSWR('/api/email', fetcher, {
+  const { data: tableData } = useSWR('/api/message', fetcher, {
     initialData: data,
   });
 

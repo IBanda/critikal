@@ -11,7 +11,7 @@ export default function Header() {
     await fetch('/api/logout');
     mutateSubscriber();
     router.push('/signin');
-    mutate('/api/email');
+    mutate('/api/message');
   };
   return (
     <header className="flex items-center justify-between px-3 mb-8">

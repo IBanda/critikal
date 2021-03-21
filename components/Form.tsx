@@ -35,7 +35,7 @@ export default function Form({ receiverEmail }: Props) {
       sending: true,
     });
     try {
-      const response = await fetch('/api/email', {
+      const response = await fetch('/api/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
