@@ -2,6 +2,7 @@ import { FormEvent, useRef, useState } from 'react';
 import Button from './Button';
 import CreateTagInput, { CreatableSelectValue } from './CreateTagInput';
 import Input from './Input';
+import Alert from './Alert';
 
 function extractColumns(columns: string): string[] {
   return columns.split(',').map((item) => item.toLowerCase());
@@ -15,12 +16,14 @@ export default function TagForm() {
   const [file, setFIle] = useState(null);
   const [tags, setTags] = useState([]);
   const [cols, setCols] = useState('');
+  const [{ message, success }, setNotification] = useState({
+    message: '',
+    success: false,
+  });
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onTagCreate = (newTags: CreatableSelectValue[]) => {
-    if (newTags.length) {
-      setTags(extractTags(newTags));
-    }
+    setTags(extractTags(newTags));
   };
 
   const onSubmit = async (event: FormEvent) => {
@@ -36,16 +39,38 @@ export default function TagForm() {
       formData.append('cols', JSON.stringify(extractColumns(cols)));
     }
 
-    const res = await fetch('/api/tag', {
-      method: 'POST',
-      body: formData,
-    });
-    const data = await res;
-    console.log(data.body);
+    try {
+      const res = await fetch('/api/tag', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res;
+
+      if (data.ok) {
+        setNotification({
+          message: 'Tags were successfully added',
+          success: true,
+        });
+      }
+    } catch (error) {
+      setNotification({
+        message: 'Something went wrong',
+        success: false,
+      });
+    }
   };
 
   return (
     <form className="max-w-md" onSubmit={onSubmit}>
+      <Alert
+        show={Boolean(message)}
+        duration={2000}
+        autoHide
+        onHide={() => setNotification({ message: '', success: false })}
+        className={`${success ? 'bg-green-500' : 'bg-red-500'} mt-4`}
+      >
+        {message}
+      </Alert>
       <h1 className="text-center font-medium text-lg">Upload your files</h1>
       <h3 className="text-sm text-gray-400 text-center">File should csv</h3>
       <div className="relative p-4 my-4 h-28 w-full bg-white border border-dashed border-blue-300  rounded">
@@ -80,7 +105,11 @@ export default function TagForm() {
         OR
       </div>
       <CreateTagInput onTagCreate={onTagCreate} />
-      <Button type="submit" className="bg-gray-900 p-2 w-full mt-4">
+      <Button
+        disabled={!tags.length && !file}
+        type="submit"
+        className="bg-gray-900 p-2 w-full mt-4"
+      >
         Upload
       </Button>
     </form>
