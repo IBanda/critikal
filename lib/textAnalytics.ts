@@ -2,11 +2,8 @@ import {
   TextAnalyticsClient,
   AnalyzeSentimentSuccessResult,
   ExtractKeyPhrasesSuccessResult,
-  DetectLanguageSuccessResult,
-  DetectLanguageResultArray,
   AzureKeyCredential,
 } from '@azure/ai-text-analytics';
-import { v4 as uuidv4 } from 'uuid';
 
 const client = new TextAnalyticsClient(
   process.env.AZURE_ENDPOINT,
@@ -72,41 +69,7 @@ async function extractKeyPhrases(text: string) {
   return { keyPhrases: phrases };
 }
 
-async function detectLanguage(text: string) {
-  const languages: DetectLanguageResultArray = await client.detectLanguage([
-    text,
-  ]);
-  const language = languages[0] as DetectLanguageSuccessResult;
-  return language.primaryLanguage.iso6391Name;
-}
-
-async function translate(text: string) {
-  const res = await fetch(
-    'https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=zh-Hans',
-    {
-      method: 'POST',
-      headers: {
-        'Ocp-Apim-Subscription-Key': process.env.AZURE_TRANSLATOR_KEY,
-        'Ocp-Apim-Subscription-Region': 'global',
-        'Content-type': 'application/json; charset=UTF-8',
-        'X-ClientTraceId': uuidv4().toString(),
-      },
-      body: JSON.stringify([
-        {
-          text,
-        },
-      ]),
-    }
-  );
-  const data = await res.json();
-  return data;
-}
-
 export default async function analyzeText(text: string) {
-  const language = await detectLanguage(text);
-  if (language !== 'en') {
-    await translate(text);
-  }
   const analysisResult = await analyze(text);
   const keyPhrases = await extractKeyPhrases(text);
   return { ...analysisResult, ...keyPhrases };
