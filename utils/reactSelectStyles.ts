@@ -1,7 +1,7 @@
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
-    padding: '0.2.5em 0',
+    padding: '0.25em 0',
     border: 'none',
     backgroundColor: '#e0e7ff',
     cursor: 'pointer',
