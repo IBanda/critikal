@@ -21,7 +21,6 @@ export default withSession(
       keepExtensions: true,
       uploadDir: './uploads',
     });
-    let message;
     try {
       if (req.method === 'POST') {
         form.parse(req, async (_, fields, files) => {
@@ -54,7 +53,7 @@ export default withSession(
               { subscriber: subscriber.id },
               { $addToSet: { tags: tagValues } }
             );
-            message = { message: 'Successfully updated tags' };
+
             if (isFileIncluded) {
               fs.unlink(files.csvFile.path);
             }
@@ -67,9 +66,8 @@ export default withSession(
           if (isFileIncluded) {
             fs.unlink(files.csvFile.path);
           }
-          message = { message: 'Tags were successfully created' };
         });
-        res.json(message);
+        res.end();
       } else if (req.method === 'GET') {
         const { tags } = await Tag.findOne({ subscriber: subscriber.id });
         res.status(200).json(tags);
