@@ -37,15 +37,20 @@ export default function CreateTagInput({ onTagCreate }: Props) {
       default:
     }
   };
+  const onChange = (newValue) => {
+    setValue(newValue);
+    onTagCreate(newValue);
+  };
   return (
     <CreatableSelect
       isMulti
+      isClearable
       components={components}
       onInputChange={(newValue) => setInputValue(newValue)}
       inputValue={inputValue}
       menuIsOpen={false}
       value={value}
-      onChange={(newValue) => setValue(newValue)}
+      onChange={onChange}
       placeholder="Create tags"
       options={[]}
       onKeyDown={handleKeyDown}
