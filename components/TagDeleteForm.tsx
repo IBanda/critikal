@@ -36,13 +36,12 @@ export default function TagDeleteForm() {
       setNotification(error);
     }
   };
-
   return (
     <>
       <form className="py-16" onSubmit={onSubmit}>
         <Alert
           show={Boolean(message)}
-          duration={5000}
+          duration={2000}
           autoHide
           onHide={() => setNotification({ message: '', success: false })}
           className={success ? 'bg-green-500' : 'bg-red-500'}
@@ -57,7 +56,11 @@ export default function TagDeleteForm() {
           loadOptions={loadOptions}
           styles={customStyles}
         />
-        <Button className="bg-gray-900 p-2 w-full mt-4" type="submit">
+        <Button
+          disabled={!value.length}
+          className="bg-gray-900 p-2 w-full mt-4"
+          type="submit"
+        >
           Delete
         </Button>
       </form>
