@@ -2,7 +2,7 @@
   "name": "critikal",
   "version": "1.0.0",
   "description": "",
-  "private":"true",
+  "private": "true",
   "main": "index.js",
   "workspaces": [
     "packages/*"
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
-    "lerna":"lerna"
+    "lerna": "lerna"
   },
   "repository": {
     "type": "git",
