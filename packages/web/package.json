@@ -9,13 +9,13 @@
     "test": "jest --watch",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
-    "lint:staged": "lint-staged",
-    "prepare": "husky install"
+    "lint:staged": "lint-staged"
   },
   "dependencies": {
     "@azure/ai-text-analytics": "5.1.0-beta.3",
     "@primer/octicons-react": "^12.1.0",
     "autoprefixer": "^10.2.4",
+    "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
     "formidable": "^1.2.2",
     "mongoose": "^5.11.18",
