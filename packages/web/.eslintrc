@@ -1,7 +1,7 @@
 {
   "extends": ["airbnb-typescript", "airbnb/hooks", "prettier"],
   "parserOptions": {
-    "project": "./packages/web/tsconfig.json"
+    "project": "tsconfig.json"
   },
   "ignorePatterns": ["node_modules", "tailwind.config.js", "postcss.config.js"],
   "rules": {

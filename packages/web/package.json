@@ -9,7 +9,7 @@
     "test": "jest --watch",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
-    "lint:staged": "lint-staged"
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@azure/ai-text-analytics": "5.1.0-beta.3",
