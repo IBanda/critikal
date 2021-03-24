@@ -2,6 +2,8 @@
 import useSubscriber from 'lib/useSubscriber';
 import { useState } from 'react';
 import Link from 'next/link';
+import getAlertColor from 'utils/notificationColors';
+import useFetch from 'lib/useFetch';
 import Alert from './Alert';
 import Input from './Input';
 import Button from './Button';
@@ -9,10 +11,12 @@ import Button from './Button';
 export default function SigninForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [{ message, success }, setNotification] = useState({
-    message: '',
-    success: false,
-  });
+  const {
+    fetcher,
+    notification: { message, loading, success },
+    setNotification,
+    initialNotification,
+  } = useFetch({ loadingMessage: '...Authenticating' });
   const { mutateSubscriber } = useSubscriber({
     redirect: true,
     redirectPath: '/dashboard/',
@@ -20,35 +24,30 @@ export default function SigninForm() {
 
   const onSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      const response = await fetch('/api/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-      const data = await response.json();
-      setNotification(data);
-      if (data.success) {
-        await new Promise((r) => setTimeout(r, 2000));
-        mutateSubscriber(data);
-      }
-    } catch (err) {
-      setNotification(err);
+    const response = await fetcher('/api/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+    if (response.success) {
+      await new Promise((r) => setTimeout(r, 2000));
+      mutateSubscriber(response);
     }
   };
+
   return (
     <form className="max-w-md" onSubmit={onSignUp}>
       <Alert
         show={Boolean(message)}
         duration={5000}
         autoHide
-        onHide={() => setNotification({ message: '', success: false })}
-        className={success ? 'bg-green-500' : 'bg-red-500'}
+        onHide={() => setNotification(initialNotification)}
+        className={getAlertColor(success, loading)}
       >
         {message}
       </Alert>
@@ -61,6 +60,7 @@ export default function SigninForm() {
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           autoComplete="off"
+          className="my-2"
         />
       </label>
       <label htmlFor="password" className="font-medium">
@@ -71,6 +71,7 @@ export default function SigninForm() {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           autoComplete="off"
+          className="my-2"
         />
       </label>
       <Button className="mt-4 bg-gray-900 w-full p-3 " type="submit">

@@ -1,4 +1,7 @@
 import { FormEvent, useRef, useState } from 'react';
+import { initialNotification } from 'lib/useFetch';
+import getAlertColor from 'utils/notificationColors';
+import { mutate } from 'swr';
 import Button from './Button';
 import CreateTagInput, { CreatableSelectValue } from './CreateTagInput';
 import Input from './Input';
@@ -16,10 +19,9 @@ export default function TagForm() {
   const [file, setFIle] = useState(null);
   const [tags, setTags] = useState([]);
   const [cols, setCols] = useState('');
-  const [{ message, success }, setNotification] = useState({
-    message: '',
-    success: false,
-  });
+  const [{ message, success, loading }, setNotification] = useState(
+    initialNotification
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onTagCreate = (newTags: CreatableSelectValue[]) => {
@@ -40,6 +42,11 @@ export default function TagForm() {
     }
 
     try {
+      setNotification({
+        message: '...Uploading',
+        success: false,
+        loading: true,
+      });
       const res = await fetch('/api/tag', {
         method: 'POST',
         body: formData,
@@ -50,12 +57,15 @@ export default function TagForm() {
         setNotification({
           message: 'Tags were successfully added',
           success: true,
+          loading: false,
         });
+        mutate('/api/tag');
       }
     } catch (error) {
       setNotification({
         message: 'Something went wrong',
         success: false,
+        loading: false,
       });
     }
   };
@@ -66,8 +76,8 @@ export default function TagForm() {
         show={Boolean(message)}
         duration={2000}
         autoHide
-        onHide={() => setNotification({ message: '', success: false })}
-        className={`${success ? 'bg-green-500' : 'bg-red-500'} mt-4`}
+        onHide={() => setNotification(initialNotification)}
+        className={`${getAlertColor(success, loading)} mt-4`}
       >
         {message}
       </Alert>

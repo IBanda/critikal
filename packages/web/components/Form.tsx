@@ -2,6 +2,8 @@
 import { FormEvent, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import useFetch from 'lib/useFetch';
+import getAlertColor from 'utils/notificationColors';
 import Input from './Input';
 import Alert from './Alert';
 
@@ -20,42 +22,33 @@ export default function Form({ receiverEmail }: Props) {
   const [subject, setSubject] = useState('');
   const [htmlMessage, setHtml] = useState('');
   const [textMessage, setText] = useState('');
-  const [{ message, sending }, setNotification] = useState({
-    message: '',
-    success: false,
-    sending: false,
-  });
+  const {
+    fetcher,
+    notification: { message, success, loading },
+    setNotification,
+    initialNotification,
+  } = useFetch({ loadingMessage: '...Sending' });
   const router = useRouter();
   const { id } = router.query;
   const onEmailSend = async (e: FormEvent) => {
     e.preventDefault();
-    setNotification({
-      message: 'Sending...',
-      success: false,
-      sending: true,
+    const response = await fetcher('/api/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+        receiverEmail,
+        senderEmail: email,
+        name,
+        subject,
+        htmlMessage,
+        textMessage,
+      }),
     });
-    try {
-      const response = await fetch('/api/message', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id,
-          receiverEmail,
-          senderEmail: email,
-          name,
-          subject,
-          htmlMessage,
-          textMessage,
-        }),
-      });
-      const data = await response.json();
-      if (data.success) {
-        router.push('/success');
-      }
-    } catch (error) {
-      setNotification(error);
+    if (response.success) {
+      router.push('/success');
     }
   };
 
@@ -64,11 +57,9 @@ export default function Form({ receiverEmail }: Props) {
       <Alert
         show={Boolean(message)}
         duration={5000}
-        autoHide={!sending}
-        onHide={() =>
-          setNotification({ message: '', success: false, sending: false })
-        }
-        className={`${sending ? 'bg-yellow-400' : 'bg-red-500'}`}
+        autoHide={!loading}
+        onHide={() => setNotification(initialNotification)}
+        className={getAlertColor(success, loading)}
       >
         {message}
       </Alert>

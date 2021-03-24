@@ -1,50 +1,46 @@
 import { FormEvent, useState } from 'react';
-import ReactSelect from 'react-select/async';
+import ReactSelect from 'react-select';
 import customStyles from 'utils/reactSelectStyles';
 import qs from 'querystring';
+import useFetch from 'lib/useFetch';
+import getAlertColor from 'utils/notificationColors';
+import useSWR from 'swr';
 import Button from './Button';
 import Alert from './Alert';
 
 const createSelectInput = (data: string[]) =>
-  data.map((d) => ({ label: d, value: d }));
+  data?.map((d) => ({ label: d, value: d }));
 const extractTags = (data) => data.map((d) => d.value);
 
 export default function TagDeleteForm() {
   const [value, setValue] = useState('');
-  const [{ message, success }, setNotification] = useState({
-    message: '',
-    success: false,
-  });
-  const loadOptions = () =>
-    fetch('/api/tag')
-      .then((tags) => tags.json())
-      .then((data) => Promise.resolve(createSelectInput(data)));
+  const {
+    fetcher,
+    notification: { message, success, loading },
+    setNotification,
+    initialNotification,
+  } = useFetch({ loadingMessage: '...processing' });
+  const { data, mutate } = useSWR('/api/tag', (url) =>
+    fetch(url).then((r) => r.json())
+  );
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    try {
-      const res = await fetch(
-        `/api/tag?${qs.stringify({ tags: extractTags(value) })}`,
-        {
-          method: 'DELETE',
-        }
-      );
-      const data = await res.json();
-      setNotification(data);
-      setValue('');
-    } catch (error) {
-      setNotification(error);
-    }
+    await fetcher(`/api/tag?${qs.stringify({ tags: extractTags(value) })}`, {
+      method: 'DELETE',
+    });
+    setValue('');
+    mutate();
   };
   return (
     <>
       <form className="py-16" onSubmit={onSubmit}>
         <Alert
           show={Boolean(message)}
-          duration={2000}
+          duration={5000}
           autoHide
-          onHide={() => setNotification({ message: '', success: false })}
-          className={success ? 'bg-green-500' : 'bg-red-500'}
+          onHide={() => setNotification(initialNotification)}
+          className={getAlertColor(success, loading)}
         >
           {message}
         </Alert>
@@ -53,7 +49,7 @@ export default function TagDeleteForm() {
           isMulti
           value={value}
           onChange={(v) => setValue(v)}
-          loadOptions={loadOptions}
+          options={createSelectInput(data) || []}
           styles={customStyles}
         />
         <Button

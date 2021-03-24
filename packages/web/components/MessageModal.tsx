@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import Alert from 'components/Alert';
+import useFetch from 'lib/useFetch';
+import getAlertColor from 'utils/notificationColors';
 import Button from './Button';
 import Modal from './Modal';
 
@@ -11,10 +12,12 @@ interface Props {
 }
 
 export default function MessageModal({ id, onHide }: Props) {
-  const [{ message, success }, setNotification] = useState({
-    message: '',
-    success: false,
-  });
+  const {
+    fetcher,
+    notification: { message, success, loading },
+    setNotification,
+    initialNotification,
+  } = useFetch({ loadingMessage: '...processing' });
   const [action, setAction] = useState('');
   const { data, error } = useSWR(`/api/message?id=${id}`, (url) =>
     fetch(url).then((res) => res.json())
@@ -26,18 +29,26 @@ export default function MessageModal({ id, onHide }: Props) {
     const btn = event.target.closest('button').id;
     const status = btn === 'actionable' ? 'actionable' : 'resolved';
     setAction(status);
-    const res = await callApi(id, status);
+    await fetcher(`/api/message?id=${id}&status=${status}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     setAction('');
-    setNotification(res);
     mutate('/api/message');
     mutate(`/api/message?id=${id}`);
   };
 
   const onDelete = async () => {
     setAction('delete');
-    const res = await callApi(id);
+    await fetch(`/api/message?id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     setAction('');
-    setNotification(res);
     mutate('/api/message');
     await new Promise((r) => setTimeout(r, 500));
     onHide();
@@ -51,10 +62,10 @@ export default function MessageModal({ id, onHide }: Props) {
         <>
           <Alert
             show={Boolean(message)}
-            duration={5000}
+            duration={2000}
             autoHide
-            onHide={() => setNotification({ message: '', success: false })}
-            className={`mt-2 ${success ? 'bg-green-500' : 'bg-red-500'}`}
+            onHide={() => setNotification(initialNotification)}
+            className={`mt-2 ${getAlertColor(success, loading)}`}
           >
             {message}
           </Alert>
@@ -117,19 +128,4 @@ export default function MessageModal({ id, onHide }: Props) {
       )}
     </Modal>
   );
-}
-
-async function callApi(id: string, status?: string) {
-  try {
-    const res = await fetch(`/api/message?id=${id}&status=${status}`, {
-      method: status ? 'PATCH' : 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    return error;
-  }
 }
