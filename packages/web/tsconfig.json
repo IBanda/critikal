@@ -19,6 +19,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    ".eslintrc.js",
     "tailwind.config.js",
     "mocks/index.ts",
     "public/mockServiceWorker.js"
