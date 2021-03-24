@@ -8,11 +8,10 @@ export default function AuthLayout({ children, imgSrc }: Props) {
     <div className="grid md:grid-cols-5 h-full ">
       <div className="col-span-2 hidden md:flex flex-col items-center justify-center bg-gray-900 shadow-lg">
         <h1 className="text-white  font-bold tracking-tighter text-center text-5xl">
-
-        Insights from your inbox
+          Insights from your inbox
         </h1>
         <h2 className="text-lg text-white font-medium tracking-tighter">
-          It's in the Details
+          It&apos;s in the Details
         </h2>
         <img className="max-w-md" src={`/${imgSrc}.svg`} alt="messages" />
       </div>
