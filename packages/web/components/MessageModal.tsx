@@ -19,11 +19,12 @@ export default function MessageModal({ id, onHide }: Props) {
     initialNotification,
   } = useFetch({ loadingMessage: '...processing' });
   const [action, setAction] = useState('');
-  const { data, error } = useSWR(`/api/message?id=${id}`, (url) =>
-    fetch(url).then((res) => res.json())
+  const { data, error, mutate: mutateSingle } = useSWR(
+    `/api/message?id=${id}`,
+    (url) => fetch(url).then((res) => res.json())
   );
   const isLoading = !data && !error;
-  const isHighPriority = data?.insights?.priority === 'high';
+  const isHighPriority = data?._doc.insights?.priority === 'high';
 
   const onUpdateStatus = async (event) => {
     const btn = event.target.closest('button').id;
@@ -37,7 +38,7 @@ export default function MessageModal({ id, onHide }: Props) {
     });
     setAction('');
     mutate('/api/message');
-    mutate(`/api/message?id=${id}`);
+    mutateSingle();
   };
 
   const onDelete = async () => {
@@ -49,11 +50,13 @@ export default function MessageModal({ id, onHide }: Props) {
       },
     });
     setAction('');
-    mutate('/api/message');
-    await new Promise((r) => setTimeout(r, 500));
-    onHide();
+    await new Promise(() =>
+      setTimeout(() => {
+        mutate('/api/message');
+        onHide();
+      }, 500)
+    );
   };
-
   return (
     <Modal show={Boolean(id)} onHide={onHide}>
       {isLoading ? (
@@ -72,13 +75,13 @@ export default function MessageModal({ id, onHide }: Props) {
           <div>
             <span className="font-medium">Subject:</span>
             <div className="bg-indigo-100 p-2 my-2 rounded">
-              <h1>{data.subject}</h1>
+              <h1>{data._doc.subject}</h1>
             </div>
           </div>
           <div>
             <span className="font-medium">Message:</span>
             <div className="max-h-36 overflow-auto bg-indigo-100 my-2 p-2 rounded">
-              <div dangerouslySetInnerHTML={{ __html: data.message }} />
+              <div dangerouslySetInnerHTML={{ __html: data._doc.message }} />
             </div>
           </div>
           <div className="flex items-center mb-4">
@@ -88,25 +91,27 @@ export default function MessageModal({ id, onHide }: Props) {
                 isHighPriority ? 'red' : 'green'
               }-500`}
             >
-              {data.insights.priority}
+              {data._doc.insights.priority}
             </div>
           </div>
-          <div className="mb-4">
-            <ul className="flex flex-wrap max-h-12 overflow-auto">
-              {data.insights.keyPhrases.map((phrase) => (
-                <li
-                  className="mr-1 mb-0.5 bg-green-500 rounded px-1.5 py-0.5 text-white text-xs"
-                  key={phrase}
-                >
-                  {phrase}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {Boolean(data.usedTags.length) && (
+            <div className="mb-4">
+              <ul className="flex flex-wrap max-h-12 overflow-auto">
+                {data.usedTags.map((tag) => (
+                  <li
+                    className="mr-1 mb-0.5 bg-green-500 rounded px-1.5 py-0.5 text-white text-xs"
+                    key={tag}
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4">
             <Button
               id="actionable"
-              disabled={data.status === 'actionable'}
+              disabled={data._doc.status === 'actionable'}
               onClick={onUpdateStatus}
               className="bg-gray-900 p-2"
             >
@@ -114,7 +119,7 @@ export default function MessageModal({ id, onHide }: Props) {
             </Button>
             <Button
               onClick={onUpdateStatus}
-              disabled={data.status === 'resolved'}
+              disabled={data._doc.status === 'resolved'}
               id="resolve"
               className="bg-gray-900 p-2 "
             >

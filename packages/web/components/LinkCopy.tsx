@@ -7,12 +7,15 @@ interface Props {
 export default function LinkCopy({ id }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [showAlert, setAlert] = useState(false);
+  const [origin, setOrigin] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => setAlert(false), 1000);
     return () => clearTimeout(timer);
   }, [showAlert]);
-
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
   const onCopy = () => {
     navigator.clipboard.writeText(inputRef.current.value).then(() => {
       setAlert(true);
@@ -27,9 +30,10 @@ export default function LinkCopy({ id }: Props) {
         <input
           type="text"
           ref={inputRef}
-          value={`http://localhost:3000/form/${id}`}
+          value={`${origin}/form/${id}`}
           className="bg-gray-100 p-2 md:w-80 focus:outline-none lg:text-sm text-indigo-900"
-          readOnly
+          onChange={(e) => setOrigin(e.target.value)}
+          disabled
         />
         <div className="absolute right-0 bg-gray-100">
           {showAlert && (

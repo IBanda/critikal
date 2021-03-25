@@ -1,6 +1,5 @@
 import db from 'lib/db';
 import Message from 'models/message';
-import Tag from 'models/tag';
 import Cors from 'cors';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import initMiddleware from 'lib/initMiddleware';
@@ -20,25 +19,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const { messageId } = req.query;
         if (!messageId) return res.end();
         const message = await Message.findOne({ id: String(messageId) });
-        const { tags } = await Tag.findOne({ subscriber: message.receiver });
-        const lowerCaseTags = tags?.map((tag) => tag.toLowerCase());
-        const usedTags = message.insights.keyPhrases.filter((phrase) =>
-          lowerCaseTags?.includes(phrase.toLowerCase())
-        );
-        if (usedTags.length) {
-          return res.status(200).json({ ...message, usedTags });
-        }
-        res.status(200).json(message);
+        if (!message)
+          return res.status(404).json({
+            message: 'This message was deleted from your Critikal dashboard',
+            success: false,
+          });
+
+        res.status(200).json({ ...message, success: true });
         break;
       }
       case 'PATCH': {
         const { messageId, status } = req.query;
         if (status === 'actionable' || status === 'resolved') {
-          const message = await Message.updateOne(
+          const message = await Message.findOneAndUpdate(
             { id: String(messageId) },
-            { status }
+            { status },
+            { new: true }
           );
-          res.status(200).json(message);
+          res.status(200).json({ ...message, success: true });
         }
         break;
       }
@@ -46,7 +44,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         throw new Error('Unsupported method');
     }
   } catch (error) {
-    console.log(error);
-    res.status(error.status || 500).json(error);
+    res.status(error.statusCode || 500).json(error);
   }
 };

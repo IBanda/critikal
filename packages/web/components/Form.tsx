@@ -70,6 +70,7 @@ export default function Form({ receiverEmail }: Props) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className="my-2"
         />
       </label>
       <label htmlFor="email" className="font-medium tracking-tighter">
@@ -79,6 +80,7 @@ export default function Form({ receiverEmail }: Props) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="my-2"
         />
       </label>
       <label htmlFor="subject" className="font-medium tracking-tighter">
@@ -88,6 +90,7 @@ export default function Form({ receiverEmail }: Props) {
           type="text"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
+          className="my-2"
         />
       </label>
       <label htmlFor="message" className="font-medium tracking-tighter">

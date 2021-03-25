@@ -48,10 +48,11 @@ export default withSession(
           const subscriberTagExist = await Tag.exists({
             subscriber: subscriber.id,
           });
+
           if (subscriberTagExist) {
             await Tag.updateOne(
               { subscriber: subscriber.id },
-              { $addToSet: { tags: tagValues } }
+              { $addToSet: { tags: tagValues as any } }
             );
 
             if (isFileIncluded) {

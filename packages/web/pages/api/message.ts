@@ -10,6 +10,7 @@ import formatData from 'utils/formatData';
 import markSentences from 'utils/markSentences';
 import underlineOpinions from 'utils/underlineOpinions';
 import modifyResult from 'utils/modifyResult';
+import includes from 'utils/includes';
 
 export default withSession(
   async (req: NextApiReqWithSession, res: NextApiResponse) => {
@@ -78,8 +79,10 @@ export default withSession(
             return res.json([]);
           }
           if (id) {
-            const email = await Message.findOne({ id: String(id) });
-            res.status(200).json(email);
+            const message = await Message.findOne({ id: String(id) });
+            const { tags } = await Tag.findOne({ subscriber: subscriber.id });
+            const usedTags = includes(tags, message.insights.keyPhrases);
+            res.status(200).json({ ...message, usedTags });
           } else {
             let data = [];
             const emails = await Message.find(
