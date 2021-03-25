@@ -1,73 +1,90 @@
 import * as React from "react";
-import { Button, ButtonType, ActionButton, IIconProps } from "office-ui-fabric-react";
-import Header from "./Header";
-import HeroList, { HeroListItem } from "./HeroList";
-import Progress from "./Progress";
+import { MessageBar, MessageBarType, Spinner, SpinnerSize } from "office-ui-fabric-react";
+import PriorityBar from "./PriorityBar";
+import Actions from "./Actions";
 // images references in the manifest
 import "../../../assets/icon-16.png";
 import "../../../assets/icon-32.png";
 import "../../../assets/icon-80.png";
-/* global Button, Header, HeroList, HeroListItem, Progress */
 
 export interface AppProps {
   title: string;
   isOfficeInitialized: boolean;
 }
-
-export interface AppState {
-  listItems: HeroListItem[];
+interface AppState {
+  status: string;
+  priority: "high" | "normal";
+  loading: boolean;
+  isStatusUpdating: boolean;
+  error: string;
 }
 
 function formatMesssageId(messageId: string) {
   return messageId.replace(/[<|>]/g, "");
 }
-const actionableIcon: IIconProps = { iconName: "SetAction" };
+
 export default function App({ title, isOfficeInitialized }: AppProps) {
-  const [listItems, setItems] = React.useState([]);
+  const [{ status, priority, loading, isStatusUpdating, error }, setMessage] = React.useState<AppState | null>({
+    loading: true,
+    priority: "normal",
+    status: "",
+    error: "",
+    isStatusUpdating: false,
+  });
+  const messageIdRef = React.useRef<string>(null);
   React.useEffect(() => {
-    const fetchMessage = async () => {
+    (async () => {
       const messageId = formatMesssageId(await Office.context.mailbox.item.internetMessageId);
-      console.log(messageId);
-      const res = await fetch(`http://localhost:3000/api/add-in/message?messageId=${messageId}`, {
-        mode: "cors",
-      });
+      messageIdRef.current = messageId;
+      const res = await fetch(`http://localhost:3000/api/add-in/message?messageId=${messageId}`);
       const data = await res.json();
-      setItems([]);
-      console.log(data);
-    };
-    fetchMessage();
+      if (!data.success) return setMessage((prev) => ({ ...prev, error: data.message }));
+      setMessage((prev) => ({
+        ...prev,
+        loading: false,
+        status: data?._doc.status,
+        priority: data?._doc.insights?.priority,
+      }));
+    })();
   }, []);
-
-  const click = async () => {
-    /**
-     * Insert your Outlook code here
-     */
-    console.log(Office.context.mailbox.item.internetMessageId);
+  const onStatusChange = async (status: string) => {
+    try {
+      setMessage((prev) => ({ ...prev, isStatusUpdating: true }));
+      const res = await fetch(
+        `http://localhost:3000/api/add-in/message?messageId=${messageIdRef.current}&status=${status}`,
+        {
+          method: "PATCH",
+          cache: "no-cache",
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      setMessage((prev) => ({
+        ...prev,
+        status: data._doc.status,
+        isStatusUpdating: false,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  if (!isOfficeInitialized) {
-    return (
-      <Progress title={title} logo="assets/logo-filled.png" message="Please sideload your addin to see app body." />
-    );
-  }
-
+  if (error) return <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>;
+  const isLoading = !isOfficeInitialized || loading;
   return (
     <div className="ms-welcome">
-      <Header logo="assets/logo-filled.png" title={title} message="Welcome" />
-      <HeroList message="Discover what Office Add-ins can do for you today!" items={listItems}>
-        <p className="ms-font-l">
-          Modify the source files, then click <b>Run</b>.
-        </p>
-        <Button
-          className="ms-welcome__action"
-          buttonType={ButtonType.hero}
-          iconProps={{ iconName: "ChevronRight" }}
-          onClick={click}
-        >
-          Run
-        </Button>
-        <ActionButton iconProps={actionableIcon}>Set Actionable</ActionButton>
-      </HeroList>
+      {isLoading ? (
+        <div className="ms-welcome__spinnerContainer">
+          <Spinner label={title} size={SpinnerSize.medium} />
+        </div>
+      ) : (
+        <>
+          <PriorityBar priority={priority} />
+          {isStatusUpdating && (
+            <Spinner className="ms-statusupdate__Spinner" label="Updating message status" size={SpinnerSize.medium} />
+          )}
+          <Actions onStatusChange={onStatusChange} status={status} />
+        </>
+      )}
     </div>
   );
 }
