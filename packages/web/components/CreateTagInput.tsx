@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import customStyles from 'utils/reactSelectStyles';
 
@@ -16,12 +16,20 @@ export interface CreatableSelectValue {
 }
 
 interface Props {
+  tags: string[];
   onTagCreate: (tags: Array<CreatableSelectValue>) => void;
 }
 
-export default function CreateTagInput({ onTagCreate }: Props) {
+export default function CreateTagInput({ onTagCreate, tags }: Props) {
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState([]);
+
+  useEffect(() => {
+    if (!tags.length && value.length) {
+      setValue([]);
+    }
+  }, [tags.length, value.length]);
+
   const handleKeyDown = (event) => {
     if (!inputValue) return;
     switch (event.key) {
