@@ -87,9 +87,9 @@ export default function MessageModal({ id, onHide }: Props) {
           <div className="flex items-center mb-4">
             <span className="font-medium">Priority:</span>
             <div
-              className={`rounded ml-1 text-xs px-2 py-0.5 text-white bg-${
-                isHighPriority ? 'red' : 'green'
-              }-500`}
+              className={`rounded ml-1 text-xs px-2 py-0.5 text-white ${
+                isHighPriority ? 'bg-red-500' : 'bg-green-500'
+              }`}
             >
               {data._doc.insights.priority}
             </div>
