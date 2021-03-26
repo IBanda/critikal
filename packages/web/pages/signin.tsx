@@ -5,7 +5,7 @@ import SigninForm from 'components/SigninForm';
 
 export default function SignUp() {
   return (
-    <AuthLayout imgSrc="inbox-cleanup-pana">
+    <AuthLayout imgSrc="Inbox-cleanup-pana">
       <SigninForm />
     </AuthLayout>
   );
