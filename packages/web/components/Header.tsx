@@ -1,6 +1,5 @@
 import useSubscriber from 'lib/useSubscriber';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import Button from './Button';
 import TagModalBtn from './TagModalBtn';
 
@@ -11,7 +10,6 @@ export default function Header() {
     await fetch('/api/logout');
     mutateSubscriber();
     router.push('/signin');
-    mutate('/api/message');
   };
   return (
     <header className="flex items-center justify-between px-3 mb-8">
