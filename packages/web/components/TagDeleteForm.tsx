@@ -21,13 +21,8 @@ export default function TagDeleteForm() {
     setNotification,
     initialNotification,
   } = useFetch({ loadingMessage: '...processing' });
-  const { data, mutate } = useSWR(
-    '/api/tag',
-    (url) => fetch(url).then((r) => r.json()),
-    {
-      initialData: [],
-      revalidateOnMount: true,
-    }
+  const { data, mutate } = useSWR('/api/tag', (url) =>
+    fetch(url).then((r) => r.json())
   );
   useEffect(() => {
     mutate();
