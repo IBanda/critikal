@@ -130,7 +130,6 @@ export default withSession(
           throw new Error('Unsupported Method');
       }
     } catch (error) {
-      console.log(error);
       res
         .status(error.reponseCode || 500)
         .json({ message: 'Something went wrong', success: false });
