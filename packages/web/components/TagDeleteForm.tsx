@@ -21,8 +21,12 @@ export default function TagDeleteForm() {
     setNotification,
     initialNotification,
   } = useFetch({ loadingMessage: '...processing' });
-  const { data, mutate } = useSWR('/api/tag', (url) =>
-    fetch(url).then((r) => r.json())
+  const { data, mutate } = useSWR(
+    '/api/tag',
+    (url) => fetch(url).then((r) => r.json()),
+    {
+      revalidateOnMount: true,
+    }
   );
 
   const onSubmit = async (event: FormEvent) => {
