@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 interface Props {
   children: React.ReactNode;
   show: boolean;
-  autoHide: boolean;
+  autoHide?: boolean;
   onHide: () => void;
   duration: number;
   className: string;
@@ -13,7 +13,7 @@ export default function Alert({
   children,
   show,
   onHide,
-  autoHide,
+  autoHide = false,
   duration,
   className,
 }: Props) {
