@@ -22,7 +22,7 @@ export default function SigninForm() {
     redirectPath: '/dashboard/',
   });
 
-  const onSignUp = async (event: React.FormEvent) => {
+  const onSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
     const response = await fetcher('/api/signin', {
       method: 'POST',
@@ -35,13 +35,13 @@ export default function SigninForm() {
       }),
     });
     if (response.success) {
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 1000));
       mutateSubscriber(response);
     }
   };
 
   return (
-    <form className="max-w-md" onSubmit={onSignUp}>
+    <form className="max-w-md" onSubmit={onSignIn}>
       <Alert
         show={Boolean(message)}
         duration={5000}
