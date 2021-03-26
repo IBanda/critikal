@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import ReactSelect from 'react-select';
 import customStyles from 'utils/reactSelectStyles';
 import qs from 'querystring';
@@ -25,9 +25,13 @@ export default function TagDeleteForm() {
     '/api/tag',
     (url) => fetch(url).then((r) => r.json()),
     {
+      initialData: [],
       revalidateOnMount: true,
     }
   );
+  useEffect(() => {
+    mutate();
+  }, [mutate]);
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -54,7 +58,7 @@ export default function TagDeleteForm() {
           isMulti
           value={value}
           onChange={(v) => setValue(v)}
-          options={data ? createSelectInput(data) : []}
+          options={createSelectInput(data)}
           styles={customStyles}
         />
         <Button

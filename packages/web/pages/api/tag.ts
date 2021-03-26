@@ -70,9 +70,12 @@ export default withSession(
         });
         res.end();
       } else if (req.method === 'GET') {
+        if (!subscriber) {
+          return res.json([]);
+        }
         const subscriberID = subscriber.id;
         const hasTags = await Tag.exists({ subscriber: subscriberID });
-        if (!hasTags) return res.end();
+        if (!hasTags) return res.json([]);
 
         const { tags } = await Tag.findOne({ subscriber: subscriberID });
         res.status(200).json(tags);
