@@ -60,6 +60,9 @@ export default function TagForm() {
           loading: false,
         });
         mutate('/api/tag');
+        setCols('');
+        setFIle(null);
+        setTags([]);
       }
     } catch (error) {
       setNotification({
@@ -114,7 +117,7 @@ export default function TagForm() {
       <div className="text-center my-2 font-medium text-xs text-gray-400">
         OR
       </div>
-      <CreateTagInput onTagCreate={onTagCreate} />
+      <CreateTagInput tags={tags} onTagCreate={onTagCreate} />
       <Button
         disabled={!tags.length && !file}
         type="submit"
