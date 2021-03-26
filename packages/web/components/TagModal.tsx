@@ -1,7 +1,9 @@
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import Modal from './Modal';
-import TagDeleteForm from './TagDeleteForm';
-import TagForm from './TagForm';
+
+const TagDeleteForm = dynamic(() => import('./TagDeleteForm'), { ssr: false });
+const TagForm = dynamic(() => import('./TagForm'), { ssr: false });
 
 interface Props {
   show: boolean;
