@@ -1,5 +1,11 @@
 module.exports = {
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  purge: {
+    content: [
+      './pages/**/*.{js,ts,jsx,tsx}',
+      './components/**/*.{js,ts,jsx,tsx}',
+    ],
+    options: { safelist: ['bg-blue-500'] },
+  },
   darkMode: false, // or 'media' or 'class'
   theme: {
     container: {
