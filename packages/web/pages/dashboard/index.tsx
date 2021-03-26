@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { useEffect, useRef } from 'react';
 import type { GetServerSideProps } from 'next';
 import Layout from 'components/Layout';
 import withSession from 'lib/session';
@@ -30,16 +31,18 @@ export default function Index({ id, data }: Props) {
     initialData: data,
     revalidateOnMount: true,
   });
+  const mount = useRef<boolean>(false);
+  useEffect(() => {
+    mount.current = true;
+  }, []);
 
-  // Data from another session remains until the key is revalidated
-  // which means another user can see data that's not theres
-  const revalidationSafeData = !tableData?.length ? data : tableData;
+  const revalidateSafeDate = mount.current ? tableData : data;
   return (
     <Layout id={id}>
       <div className="w-full flex flex-col items-center justify-center">
         <div className="mt-12  w-full">
           <div className="overflow-y-auto lg:overflow-y-visible lg:p-4">
-            <DataTableWithModal data={revalidationSafeData} />
+            <DataTableWithModal data={revalidateSafeDate} />
           </div>
         </div>
       </div>
