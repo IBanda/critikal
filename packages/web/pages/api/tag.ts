@@ -70,7 +70,11 @@ export default withSession(
         });
         res.end();
       } else if (req.method === 'GET') {
-        const { tags } = await Tag.findOne({ subscriber: subscriber.id });
+        const subscriberID = subscriber.id;
+        const hasTags = await Tag.exists({ subscriber: subscriberID });
+        if (!hasTags) return res.end();
+
+        const { tags } = await Tag.findOne({ subscriber: subscriberID });
         res.status(200).json(tags);
       } else if (req.method === 'DELETE') {
         const { tags } = req.query;
@@ -84,6 +88,7 @@ export default withSession(
         res.json({ message: 'Successfully deleted ', success: true });
       }
     } catch (error) {
+      console.log(error);
       res
         .status(error.reponseCode || 500)
         .json({ message: 'Something went wrong', success: false });

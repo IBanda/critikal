@@ -79,21 +79,32 @@ export default withSession(
             return res.json([]);
           }
           if (id) {
+            const subscriberID = subscriber.id;
+            let usedTags = [];
             const message = await Message.findOne({ id: String(id) });
-            const { tags } = await Tag.findOne({ subscriber: subscriber.id });
-            const usedTags = includes(tags, message.insights.keyPhrases);
+            const hasTags = await Tag.exists({ subscriber: subscriberID });
+            if (hasTags) {
+              const { tags } = await Tag.findOne({ subscriber: subscriber.id });
+              usedTags = includes(tags, message.insights.keyPhrases);
+            }
             res.status(200).json({ ...message, usedTags });
           } else {
-            let data = [];
             const emails = await Message.find(
               { receiver: subscriber.id },
               'id senderEmail subject insights created_on status'
             );
             if (emails.length) {
-              const { tags } = await Tag.findOne({ subscriber: subscriber.id });
-              data = formatData(emails, modifyResult(tags));
+              const hasTags = await Tag.exists({ subscriber: subscriber.id });
+              if (hasTags) {
+                const { tags } = await Tag.findOne({
+                  subscriber: subscriber.id,
+                });
+                return res
+                  .status(200)
+                  .json(formatData(emails, modifyResult(tags)));
+              }
             }
-            res.status(200).json(data);
+            res.status(200).json(formatData(emails));
           }
           break;
         }
@@ -119,6 +130,7 @@ export default withSession(
           throw new Error('Unsupported Method');
       }
     } catch (error) {
+      console.log(error);
       res
         .status(error.reponseCode || 500)
         .json({ message: 'Something went wrong', success: false });
