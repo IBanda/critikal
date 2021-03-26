@@ -43,16 +43,16 @@ export default function MessageModal({ id, onHide }: Props) {
 
   const onDelete = async () => {
     setAction('delete');
-    await fetch(`/api/message?id=${id}`, {
+    await fetcher(`/api/message?id=${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     });
     setAction('');
+    mutate('/api/message');
     await new Promise(() =>
       setTimeout(() => {
-        mutate('/api/message');
         onHide();
       }, 500)
     );
