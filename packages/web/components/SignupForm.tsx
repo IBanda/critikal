@@ -49,7 +49,6 @@ export default function SignupForm() {
       <Alert
         show={Boolean(message)}
         duration={5000}
-        autoHide
         onHide={() => setNotification(initialNotification)}
         className={getAlertColor(success, loading)}
       >
