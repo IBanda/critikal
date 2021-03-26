@@ -10,6 +10,7 @@ import Alert from './Alert';
 
 const createSelectInput = (data: string[]) =>
   data?.map((d) => ({ label: d, value: d }));
+
 const extractTags = (data) => data.map((d) => d.value);
 
 export default function TagDeleteForm() {
@@ -49,7 +50,7 @@ export default function TagDeleteForm() {
           isMulti
           value={value}
           onChange={(v) => setValue(v)}
-          options={createSelectInput(data) || []}
+          options={data ? createSelectInput(data) : []}
           styles={customStyles}
         />
         <Button
