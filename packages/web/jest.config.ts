@@ -6,7 +6,8 @@ const config: Config.InitialOptions = {
     '!**/*.d.ts',
     '!**/node_modules/**',
   ],
-  setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
+
+  setupFilesAfterEnv: ['<rootDir>/setupTests.ts', 'next'],
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest',
@@ -18,6 +19,7 @@ const config: Config.InitialOptions = {
   ],
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
+    '^.+\\.(css|scss)$': '<rootDir>/config/cssStub.ts',
     '^components(.*)$': '<rootDir>/components/$1',
     '^utils(.*)$': '<rootDir>/utils/$1',
     '^lib(.*)$': '<rootDir>/lib/$1',
