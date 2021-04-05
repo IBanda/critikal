@@ -17,10 +17,7 @@ export const config = {
 export default withSession(
   async (req: NextApiReqWithSession, res: NextApiResponse) => {
     const subscriber = req.session.get('subscriber');
-    const form = formidable({
-      keepExtensions: true,
-      uploadDir: './uploads',
-    });
+    const form = formidable();
     try {
       if (req.method === 'POST') {
         form.parse(req, async (err, fields, files) => {
