@@ -36,7 +36,7 @@ export default function App({ title, isOfficeInitialized }: AppProps) {
     (async () => {
       const messageId = formatMesssageId(await Office.context.mailbox.item.internetMessageId);
       messageIdRef.current = messageId;
-      const res = await fetch(`https://critikal.vercel.app/add-in/message?messageId=${messageId}`);
+      const res = await fetch(`https://critikal.vercel.app/api/add-in/message?messageId=${messageId}`);
       const data = await res.json();
       if (!data.success) return setMessage((prev) => ({ ...prev, error: data.message }));
       setMessage((prev) => ({
