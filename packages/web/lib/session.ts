@@ -6,7 +6,10 @@ interface Handler {
 export default function withSession(handler: Handler) {
   return withIronSession(handler, {
     cookieName: 'critikal',
-    password: process.env.COOKIE_PASSWORD,
+    password:
+      process.env.NODE_ENV === 'test'
+        ? 'testpasswordasddasdasdasdasdasdasd'
+        : process.env.COOKIE_PASSWORD,
     cookieOptions: {
       secure: process.env.NODE_ENV === 'production',
     },
