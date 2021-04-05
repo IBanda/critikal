@@ -85,7 +85,7 @@ export default function TagForm() {
         {message}
       </Alert>
       <h1 className="text-center font-medium text-lg">Upload your files</h1>
-      <h3 className="text-sm text-gray-400 text-center">File should csv</h3>
+      <h3 className="text-sm text-gray-400 text-center">CSV only</h3>
       <div className="relative p-4 my-4 h-28 w-full bg-white border border-dashed border-blue-300  rounded">
         <div className="flex flex-col items-center">
           <img className="w-12 h-12" src="/file.png" alt="file" />
@@ -110,7 +110,7 @@ export default function TagForm() {
           />
 
           <span className="text-xs text-gray-500">
-            Enter comma seperated CSV columns you wish to add,skip to add all
+            Enter comma seperated CSV columns you wish to add
           </span>
         </>
       )}
