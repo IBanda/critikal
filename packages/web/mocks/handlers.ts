@@ -48,7 +48,6 @@ export const handlers = [
   rest.get(`${baseUrl}/api/message`, async (req, res, ctx) => {
     const id = req.url.searchParams.get('id');
 
-    console.log(id);
     const message = messages.find((msg) => msg.id === id);
     await loadingDelay();
     return res(ctx.status(200), ctx.json(message));
