@@ -23,7 +23,6 @@ export default function TagForm() {
     initialNotification
   );
   const inputRef = useRef<HTMLInputElement>(null);
-
   const onTagCreate = (newTags: CreatableSelectValue[]) => {
     setTags(extractTags(newTags));
   };
@@ -62,6 +61,7 @@ export default function TagForm() {
         mutate('/api/tag');
         setCols('');
         setFIle(null);
+        inputRef.current.value = null;
         setTags([]);
       }
     } catch (error) {
