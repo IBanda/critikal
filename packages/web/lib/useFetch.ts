@@ -19,8 +19,11 @@ export default function useFetch({ loadingMessage }: UseFetchProps) {
       message: loadingMessage,
       loading: true,
     }));
+    const url =
+      process.env.NODE_ENV === 'test' ? `http://localhost:3000${input}` : input;
+
     try {
-      const res = await fetch(input, init);
+      const res = await fetch(url, init);
       const data = await res.json();
       setNotification({ ...data, loading: false });
       return data;
