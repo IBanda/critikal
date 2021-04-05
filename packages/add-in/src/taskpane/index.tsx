@@ -21,9 +21,13 @@ const render = (Component) => {
   );
 };
 
+function itemChanged() {
+  render(App);
+}
 /* Render application after Office initializes */
 Office.initialize = () => {
   isOfficeInitialized = true;
+  Office.context.mailbox.addHandlerAsync(Office.EventType.ItemChanged, itemChanged);
   render(App);
 };
 
