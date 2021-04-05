@@ -26,9 +26,12 @@ export default function DefaultForm({ email, error }: Props) {
       </div>
     </div>
   ) : (
-    <h1 className="text-xl text-center tracking-tighter font-bold mx-auto">
-      {error}
-    </h1>
+    <div className="flex flex-col items-center h-full justify-center">
+      <h1 className="text-xl text-center tracking-tighter font-bold mx-auto">
+        {error}
+      </h1>
+      <img className="w-72 md:w-96 mt-16" src="/sorry.svg" alt="sorry" />
+    </div>
   );
 }
 
@@ -36,11 +39,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id } = query;
   try {
     await db();
-    const { email } = await Subscriber.findOne({ _id: id }, 'email');
+    const subscriber = await Subscriber.findOne({ _id: id }, 'email');
 
     const props: Props = {
-      email,
-      error: email ? null : 'Link is invalid',
+      email: subscriber?.email || '',
+      error: subscriber?.email ? null : 'Link is invalid',
     };
     return {
       props,
