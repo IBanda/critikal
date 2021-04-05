@@ -20,11 +20,9 @@ export default function MessageModal({ id, onHide }: Props) {
   } = useFetch({ loadingMessage: '...processing' });
   const [action, setAction] = useState('');
   const { data, error, mutate: mutateSingle } = useSWR(
-    `/api/message?id=${id}`,
+    `/api/message/?id=${id}`,
     (url) => fetch(url).then((res) => res.json())
   );
-  const isLoading = !data && !error;
-  const isHighPriority = data?._doc.insights?.priority === 'high';
 
   const onUpdateStatus = async (event) => {
     const btn = event.target.closest('button').id;
@@ -57,6 +55,8 @@ export default function MessageModal({ id, onHide }: Props) {
       }, 500)
     );
   };
+  const isLoading = !data && !error;
+  const isHighPriority = data?._doc.insights?.priority === 'high';
   return (
     <Modal show={Boolean(id)} onHide={onHide}>
       {isLoading ? (
