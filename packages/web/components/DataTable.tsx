@@ -18,6 +18,7 @@ const columns = [
   {
     Header: 'Subject',
     accessor: 'subject',
+    Cell: ({ value }) => <strong>{value}</strong>,
   },
   {
     Header: 'Priority',
