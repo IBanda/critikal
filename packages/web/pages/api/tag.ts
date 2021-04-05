@@ -5,7 +5,7 @@ import db from 'lib/db';
 import Tag from 'models/tag';
 import fs from 'fs/promises';
 import withSession from 'lib/session';
-import formidable from 'formidable';
+import formidable from 'formidable-serverless';
 import csv from 'csvtojson';
 
 export const config = {
