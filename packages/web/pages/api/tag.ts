@@ -23,7 +23,10 @@ export default withSession(
     });
     try {
       if (req.method === 'POST') {
-        form.parse(req, async (_, fields, files) => {
+        form.parse(req, async (err, fields, files) => {
+          if (err) {
+            throw new Error(err);
+          }
           await db();
           let extractedTags = [];
           const isFileIncluded =
@@ -91,7 +94,6 @@ export default withSession(
         res.json({ message: 'Successfully deleted ', success: true });
       }
     } catch (error) {
-      console.log(error);
       res
         .status(error.reponseCode || 500)
         .json({ message: 'Something went wrong', success: false });
